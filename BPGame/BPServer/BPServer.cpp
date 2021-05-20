@@ -1,28 +1,26 @@
-#include "geneticserver.h"
+#include "BPServer.h"
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <sstream>
-#include <iomanip>
+
 
 using namespace std;
 
 
-GeneticServer::GeneticServer(){
-    serverSetup();
+BPServer::BPServer(){
+    //serverSetup();
 }
 
-void GeneticServer::error(const char *msg){
+void BPServer::error(const char *msg){
     perror(msg);
     exit(1);
 }
 
-void GeneticServer::bindingProcess(int* sockfd, int* portno, struct sockaddr_in* serv_addr){
+void BPServer::bindingProcess(int* sockfd, int* portno, struct sockaddr_in* serv_addr){
 
     *portno = baseSocketNumber;
     serv_addr->sin_family = AF_INET;
@@ -36,7 +34,7 @@ void GeneticServer::bindingProcess(int* sockfd, int* portno, struct sockaddr_in*
     }
 }
 
-void GeneticServer::serverSetup(){
+void BPServer::serverSetup(){
     std::cout.precision(16);
     int portno;
     int option = 1;
@@ -68,3 +66,4 @@ void GeneticServer::serverSetup(){
 
     cout << "Connected to GeneticPuzzle client" << endl;
 }
+
