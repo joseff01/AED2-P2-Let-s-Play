@@ -39,7 +39,7 @@ void BPServer::serverSetup(){
     int portno;
     int option = 1;
     socklen_t clilen;
-    struct sockaddr_in serv_addr, cli_addr;
+    struct sockaddr_in serv_addr{}, cli_addr{};
 
     cout << "Opening Socket..." << endl;
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
