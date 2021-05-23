@@ -180,3 +180,6 @@ fabric.properties
 
 # vscode
 .vscode/
+
+# outputs
+*.out
