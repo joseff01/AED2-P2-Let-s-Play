@@ -25,6 +25,7 @@ GenerativeImg::GenerativeImg(QImage img, int n)
     segmentate(n);
 }
 
+//! Destroy the Generative Img:: Generative Img object
 GenerativeImg::~GenerativeImg()
 {
     delete[] this->chunks;
@@ -113,4 +114,34 @@ bool GenerativeImg::isPowerOf2(int n)
     {
         return false;
     }
+}
+
+/*!
+ * \brief Get the pointer that points to the start of the array holding the chunks of the image
+ * 
+ * \return QImage* pointing to the start of the array that holds the chunks of the image
+ */
+QImage *GenerativeImg::getChunks()
+{
+    return this->chunks;
+}
+
+/*!
+ * \brief Get the QImage corresponding to the original inputted complete image
+ * 
+ * \return QImage that is the original whole image given to the object in its constructor
+ */
+QImage GenerativeImg::getOriginalImg()
+{
+    return this->originalImg;
+}
+
+/*!
+ * \brief Get the amount of chunks that there are for the image, important for indexing the chunks array
+ * 
+ * \return size_t corresponding to the amount of chunks the image was segmentated into
+ */
+size_t GenerativeImg::getNumOfChunks()
+{
+    return this->numOfChunks;
 }

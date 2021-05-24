@@ -26,6 +26,12 @@ private:
 public:
     GenerativeImg(QImage img, int n);
     ~GenerativeImg();
+
+    QImage *getChunks();
+
+    QImage getOriginalImg();
+
+    size_t getNumOfChunks();
 };
 
 #endif
