@@ -4,6 +4,11 @@
 #include <stdlib.h>
 #include "Node.h"
 
+/*!
+ * \brief A doubly-linked list to suffice all your personal vector needs
+ * 
+ * \tparam T Type of the elements.
+ */
 template <typename T>
 class List
 {
@@ -11,16 +16,19 @@ private:
     void subError(); // Handles memory subscripts out of range
     void checkPos(const size_t position);
 
+    //! Points to the first element of the list
     Node<T> *head;
+
+    //! Points to the last element of the list
     Node<T> *last;
 
+    //! Holds the current amount of elements in the list
     size_t listSize;
 
 public:
     //! Constructs a new linked list
     List() : head(nullptr), last(nullptr), listSize(0) {}
 
-    //! Calls the clear method, deleting it's contents
     ~List();
 
     // element access:

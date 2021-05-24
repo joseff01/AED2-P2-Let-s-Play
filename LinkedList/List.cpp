@@ -1,11 +1,18 @@
 #include "List.h"
 
+//! Calls the clear method, deleting it's contents
 template <typename T>
 List<T>::~List()
 {
     this->clear();
 }
 
+/*!
+ * \brief Returns a reference to the element at position _position_ in the vector container.
+ * 
+ * \param position position of the element in the container
+ * \return T the element at the specified position 
+ */
 template <typename T>
 T List<T>::at(const size_t position)
 {
@@ -20,12 +27,23 @@ T List<T>::at(const size_t position)
     return current->value;
 }
 
+/*!
+ * \brief Returns a reference to the element at position _position_ in the vector container.
+ * 
+ * \param position position of the element in the container
+ * \return T the element at the specified position 
+ */
 template <typename T>
 T List<T>::operator[](const size_t position)
 {
     return at(position);
 }
 
+/*!
+ * \brief Adds a new element as the last element of the list
+ * 
+ * \param value value of the element to be inserted
+ */
 template <typename T>
 void List<T>::push_back(const T value)
 {
@@ -45,6 +63,11 @@ void List<T>::push_back(const T value)
     ++listSize;
 }
 
+/*!
+ * \brief Removes and returns the value of the last element on the list
+ * 
+ * \return T value of the element that was removed
+ */
 template <typename T>
 T List<T>::pop_back()
 {
@@ -74,6 +97,12 @@ T List<T>::pop_back()
     }
 }
 
+/*!
+ * \brief Inserts a new element at the position given, cannot insert a new last element
+ * 
+ * \param position position where new element will be inserted, it's inserted before the element that used to have this position
+ * \param value value of the element to be inserted
+ */
 template <typename T>
 void List<T>::insert(const size_t position, const T value)
 {
@@ -106,6 +135,11 @@ void List<T>::insert(const size_t position, const T value)
     ++listSize;
 }
 
+/*!
+ * \brief Erase the node from the list at the given position
+ * 
+ * \param position position of the element to be removed from the list
+ */
 template <typename T>
 void List<T>::erase(const size_t position)
 {
@@ -151,6 +185,7 @@ void List<T>::erase(const size_t position)
     --listSize;
 }
 
+//! Empty out the contents of the list by calling pop_back() repeatedly
 template <typename T>
 void List<T>::clear()
 {
@@ -159,7 +194,11 @@ void List<T>::clear()
         this->pop_back();
     }
 }
-
+/*!
+ * \brief Checks that a position given is valid for the current list, if not it calls subError
+ * 
+ * \param position the position to evaluate
+ */
 template <typename T>
 void List<T>::checkPos(const size_t position)
 {
@@ -169,6 +208,7 @@ void List<T>::checkPos(const size_t position)
     }
 }
 
+//!Throws an out_of_range exception for calling some method with a subscript out of range
 template <typename T>
 void List<T>::subError()
 {
