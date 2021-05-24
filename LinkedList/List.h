@@ -29,8 +29,10 @@ public:
 
     // insert/delete
     void push_back(const T value);
-    T pop_back();
     void insert(const size_t position, const T value);
+
+    // delete
+    T pop_back();
     void erase(const size_t position);
     void clear();
 
