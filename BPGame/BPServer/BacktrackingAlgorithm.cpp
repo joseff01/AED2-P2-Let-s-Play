@@ -1,12 +1,22 @@
 #include "BacktrackingAlgorithm.h"
 #include <iostream>
-
+/**
+ * Function in charge of setting up the multidimensional matrix basePathMatrix, which needed to find the solution via the
+ * function findPath.
+ */
 void BacktrackingAlgorithm::basePathMatrixAssignation(){
     for (int i = 0; i < 7; i++){
         basePathMatrix[i] = new int[9];
     }
 }
 
+/**
+ * Returns the matrix with the first path it found to get from the start to the finish indicated by elementsMatrix.
+ * This function DOES NOT do the actual finding of the path, it only sets up the initial conditions and makes the recursive call to
+ * the function recursivePathing.
+ * @param elementsMatrix Matrix received from the client with the obstacles (1) the start (4) and the finish (2) of the game board
+ * @return basePathMatrix Matrix with the first found path from the start to the finish indicated by the 3 and 2 respectively in elementsMatrix
+ */
 int** BacktrackingAlgorithm::findPath(int elementsMatrix[7][9]){
     int initialPoint[2];
     finalPoint[0] = 0;
@@ -30,6 +40,12 @@ int** BacktrackingAlgorithm::findPath(int elementsMatrix[7][9]){
     return basePathMatrix;
 }
 
+/**
+ * Recursive function called by findPath. It's in charge of finding the first path it finds from the start to the finish
+ * and writing it in basePathMatrix enumerated step by step. Utilizes backtracking to find the solution, IT'S NOT GOOD PATHFINDING.
+ * @param initialPoint The point from which the function will make the decision to move to another tile.
+ * @return
+ */
 bool BacktrackingAlgorithm::recursivePathing(const int initialPoint[2]) {
     int row = initialPoint[0];
     int column = initialPoint[1];
@@ -279,7 +295,9 @@ bool BacktrackingAlgorithm::recursivePathing(const int initialPoint[2]) {
     basePathMatrix[row][column] = 0;
     return false;
 }
-
+/**
+ * Basic constructor. Sets up the base matrix multidimensional array calling the function basePathMatrixAssignation.
+ */
 BacktrackingAlgorithm::BacktrackingAlgorithm() {
     basePathMatrixAssignation();
 }
