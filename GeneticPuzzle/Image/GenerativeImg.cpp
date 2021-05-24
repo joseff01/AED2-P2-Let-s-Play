@@ -1,5 +1,6 @@
 #include "GenerativeImg.h"
 #include <stdexcept>
+#include <math.h>
 
 /*!
  * \brief Construct a new Generative Img object by giving it an image and the number of chunks you wish it to be split by
@@ -9,6 +10,19 @@
  */
 GenerativeImg::GenerativeImg(QImage img, int n)
 {
+    if (n <= 2)
+    {
+        throw std::invalid_argument("Number of chunks must be greater than 2");
+    }
+
+    if (!isSquare(n) && !isPowerOf2(n))
+    {
+        throw std::invalid_argument("Number of chunks is neither a perfect square nor a power of 2 (for a power greater than 1)");
+    }
+
+    this->chunks = new QImage[n]; //initialize array that'll hold chunks
+
+    segmentate(n);
 }
 
 GenerativeImg::~GenerativeImg()
@@ -23,31 +37,80 @@ GenerativeImg::~GenerativeImg()
  */
 void GenerativeImg::segmentate(int n)
 {
+    QImage img = this->originalImg;
+
+    int rows = img.height();
+    int columns = img.width();
+
+    int blockSizeR; // These are going to be the size of each chunk's rows and columns (width and height)
+    int blockSizeC;
+
+    if (isSquare(n))
+    {
+        blockSizeR = floor(rows / sqrt(n));
+        blockSizeC = floor(columns / sqrt(n));
+    }
+    else if (isPowerOf2(n))
+    {
+        blockSizeR = floor(rows / sqrt(n / 2));
+        blockSizeC = floor(columns / sqrt(n * 2));
+    }
+    else
+    {
+        throw std::invalid_argument("Number of chunks is neither a perfect square nor a power of 2 (for a power greater than 1)");
+    }
+
+    // ---------Actual segmentation happens beyond this point------------
+
+    QRect chunkWindow = QRect(0, 0, blockSizeC, blockSizeR); // rect representing the size of a chunk used to extract all the chunks from original image
+
+    int i = 0;
+    for (int rowChunk = 0; rowChunk < rows / blockSizeR; rowChunk++)
+    {
+        chunkWindow.setY(rowChunk * blockSizeR);
+        for (int columnChunk = 0; columnChunk < columns / blockSizeC; columnChunk++)
+        {
+            chunkWindow.setX(columnChunk * blockSizeC);
+            *(this->chunks + i) = img.copy(chunkWindow);
+            i++;
+        }
+    }
 }
 
-/*
-function ca = segmentate (img, n)
-%n is number of chunks, must be square or power of 2
+/*!
+ * \brief Checks if given number is a perfect square
+ * 
+ * \param n int to be checked
+ * \return true if n is a perfect square
+ * \return false if n is not a perfect square
+ */
+bool GenerativeImg::isSquare(int n)
+{
+    if (ceil((double)sqrt(n)) == floor((double)sqrt(n)))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
-[rows columns ~] = size(img);
-
-if (ceil(sqrt(n))==floor(sqrt(n))) %if it's a square number
-  blockSizeR = floor(rows/sqrt(n));
-  blockSizeC = floor(columns/sqrt(n));
-  
-elseif (ceil(log2(n))==floor(log2(n))) %if it's a power of 2 (note it's only the odd ones that make it here)
-  blockSizeR = floor(rows/sqrt(n/2));
-  blockSizeC = floor(columns/sqrt(n*2));
-  
-else
-  printf("Number of chunks must be square or power of 2")
-  ca={}
-  return
-endif
-
-if (blockSizeR<30||blockSizeC<30)
-  printf("Number of chunks too high, ending up in chunks that are too small to work with")
-  ca={}
-  return
-endif
-*/
+/*!
+ * \brief Checks if given number is a power of 2
+ * 
+ * \param n int to be checked
+ * \return true if n is a power of 2
+ * \return false if n is not a power of 2
+ */
+bool GenerativeImg::isPowerOf2(int n)
+{
+    if (ceil(log2(n)) == floor(log2(n)))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
