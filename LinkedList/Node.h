@@ -19,7 +19,7 @@ public:
      * 
      * \param value the value being assigned to the node
      */
-    Node(const T value) : next(nullptr), prev(nullptr), value(val) {}
+    Node(const T value) : next(nullptr), prev(nullptr), value(value) {}
 };
 
 #endif
