@@ -10,6 +10,8 @@
  */
 GenerativeImg::GenerativeImg(QImage img, int n)
 {
+    this->chunks = List<QImage>(); // initialize empty linked list
+
     if (n <= 2)
     {
         throw std::invalid_argument("Number of chunks must be greater than 2");
@@ -20,15 +22,13 @@ GenerativeImg::GenerativeImg(QImage img, int n)
         throw std::invalid_argument("Number of chunks is neither a perfect square nor a power of 2 (for a power greater than 1)");
     }
 
-    this->chunks = new QImage[n]; //initialize array that'll hold chunks
-
     segmentate(n);
 }
 
 //! Destroy the Generative Img:: Generative Img object
 GenerativeImg::~GenerativeImg()
 {
-    delete[] this->chunks;
+    this->chunks.clear();
 }
 
 /*!
@@ -72,7 +72,7 @@ void GenerativeImg::segmentate(int n)
         for (int columnChunk = 0; columnChunk < columns / blockSizeC; columnChunk++)
         {
             chunkWindow.setX(columnChunk * blockSizeC);
-            *(this->chunks + i) = img.copy(chunkWindow);
+            this->chunks.push_back(img.copy(chunkWindow));
             i++;
         }
     }
@@ -116,15 +116,15 @@ bool GenerativeImg::isPowerOf2(int n)
     }
 }
 
-/*!
- * \brief Get the pointer that points to the start of the array holding the chunks of the image
- * 
- * \return QImage* pointing to the start of the array that holds the chunks of the image
- */
-QImage *GenerativeImg::getChunks()
-{
-    return this->chunks;
-}
+// /*!
+//  * \brief Get the pointer that points to the start of the array holding the chunks of the image
+//  *
+//  * \return QImage* pointing to the start of the array that holds the chunks of the image
+//  */
+// QImage *GenerativeImg::getChunks()
+// {
+//     return this->chunks;
+// }
 
 /*!
  * \brief Get the QImage corresponding to the original inputted complete image
@@ -143,5 +143,5 @@ QImage GenerativeImg::getOriginalImg()
  */
 size_t GenerativeImg::getNumOfChunks()
 {
-    return this->numOfChunks;
+    return this->chunks.length();
 }
