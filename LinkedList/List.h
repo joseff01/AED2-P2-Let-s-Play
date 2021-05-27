@@ -8,7 +8,7 @@
 #include <initializer_list>
 #include "Node.h"
 
-#include <nlohmann/json.hpp>
+#include <json.hpp>
 
 using json = nlohmann::json;
 
