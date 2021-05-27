@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <string.h>
+#include <initializer_list>
 #include "Node.h"
 
 #include <nlohmann/json.hpp>
@@ -20,7 +21,12 @@ template <typename T>
 class List
 {
 private:
-    //!Throws an out_of_range exception for calling some method with a subscript out of range
+    /*!
+     * \brief Throws an out_of_range exception for calling some method with a subscript out of range
+     * 
+     * \param methodName for supplying the name of the method where this was called from
+     * \throws out_of_range whenever called
+     */
     void subError(const char *methodName)
     {
         char msg[] = "Subscript out of range when calling List function ";
@@ -32,6 +38,7 @@ private:
     * \brief Checks that a position given is valid for the current list, if not it calls subError
     * 
     * \param position the position to evaluate
+    * \throws out_of_range if checked position is invalid
     */
     void checkPos(const size_t position, const char *methodName)
     {
@@ -54,6 +61,41 @@ public:
     //! Constructs a new linked list
     List() : head(nullptr), last(nullptr), listSize(0) {}
 
+    /*!
+     * \brief Construct a new List object from a list of objects, this allows for { } initialization
+     * 
+     * \param params list of objects which all must be the same type as the type specified for the list
+     */
+    List(std::initializer_list<T> params) : head(nullptr), last(nullptr), listSize(0)
+    {
+        for (T element : params)
+        {
+            push_back(element);
+        }
+    }
+
+    List(List<T> const &other) : head(nullptr), last(nullptr), listSize(0)
+    {
+        this->listSize = other.listSize;
+        Node<T> *current = other.head;
+        while (current != nullptr)
+        {
+            this->push_back(current->value);
+            current = current->next;
+        }
+    }
+
+    List<T> &operator=(List<T> const &other)
+    {
+        this->listSize = other.listSize;
+        Node<T> *current = other.head;
+        while (current != nullptr)
+        {
+            this->push_back(current->value);
+            current = current->next;
+        }
+    }
+
     //! Calls the clear method, deleting it's contents
     ~List()
     {
@@ -67,6 +109,7 @@ public:
     * 
     * \param position position of the element in the container
     * \return T the element at the specified position 
+    * \throws out_of_range if position is out of bounds (position >= length())
     */
     T at(const size_t position)
     {
@@ -122,6 +165,7 @@ public:
     * 
     * \param position position where new element will be inserted, it's inserted before the element that used to have this position
     * \param value value of the element to be inserted
+    * \throws out_of_range if position is out of bounds (position > length())
     */
     void insert(const size_t position, const T value)
     {
@@ -164,16 +208,19 @@ public:
 
     // delete
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type" // Disable warning because pop_back won't give a return if it _throws_ an error
     /*!
     * \brief Removes and returns the value of the last element on the list
     * 
     * \return T value of the element that was removed
+    * \throws out_of_range if list is empty
     */
     T pop_back()
     {
         if (head == nullptr)
         {
-            return NULL; //if list empty then return null
+            subError("pop_back()");
         }
         else if (head == last) // only 1 element
         {
@@ -196,18 +243,20 @@ public:
             return retVal;
         }
     }
+#pragma GCC diagnostic pop
 
     /*!
     * \brief Erase the node from the list at the given position
     * 
     * \param position position of the element to be removed from the list
+    * \throws out_of_range if position is out of bounds (position >= length()) or if list is empty
     */
     void erase(const size_t position)
     {
         checkPos(position, "erase()");
         if (head == nullptr) //if list empty
         {
-            subError();
+            subError("erase()");
         }
 
         Node<T> *current = head;
@@ -305,11 +354,10 @@ public:
 
     template <typename U>
     friend void from_json(const json &, List<U> &);
-    // {
-    //     j.at("name").get_to(p.name);
-    //     j.at("address").get_to(p.address);
-    //     j.at("age").get_to(p.age);
-    // }
+
+    // overload << for cout
+    template <typename U>
+    friend std::ostream &operator<<(std::ostream &, const List<U> &);
 };
 
 /*!
@@ -344,6 +392,20 @@ void from_json(const json &j, List<U> &l)
     {
         l.push_back(element);
     }
+}
+
+template <typename U>
+std::ostream &operator<<(std::ostream &os, const List<U> &l)
+{
+    Node<U> *current = l.head;
+    os << "[" << current->value;
+    while (current->next != nullptr)
+    {
+        current = current->next;
+        os << ", " << current->value;
+    }
+    os << "]";
+    return os;
 }
 
 #endif
