@@ -20,11 +20,6 @@ public:
      * \param value the value being assigned to the node
      */
     Node(const T value) : next(nullptr), prev(nullptr), value(value) {}
-
-    Node<T> &operator=(Node<T> const &other)
-    {
-        this->value = other.value;
-    }
 };
 
 #endif

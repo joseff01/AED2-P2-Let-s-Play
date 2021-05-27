@@ -295,6 +295,19 @@ public:
         --listSize;
     }
 
+    void replace(const size_t position, T newValue)
+    {
+        checkPos(position, "replace()");
+
+        Node<T> *current = head;
+
+        for (size_t i = 0; i < position; i++)
+        {
+            current = current->next;
+        }
+        current->value = newValue;
+    }
+
     //! Empty out the contents of the list by calling pop_back() repeatedly
     void clear()
     {
