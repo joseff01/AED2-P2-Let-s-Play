@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdexcept>
 #include <iostream>
+#include <string.h>
 #include "Node.h"
 
 /*!
@@ -16,10 +17,11 @@ class List
 {
 private:
     //!Throws an out_of_range exception for calling some method with a subscript out of range
-    void subError()
+    void subError(const char *methodName)
     {
-        std::cout << "ERROR: Subscript out of range.\n";
-        throw std::out_of_range("Subscript out of range.");
+        char msg[] = "Subscript out of range when calling List function ";
+        std::cout << msg << methodName << '\n';
+        throw std::out_of_range(strcat(msg, methodName));
     }
 
     /*!
@@ -27,11 +29,11 @@ private:
     * 
     * \param position the position to evaluate
     */
-    void checkPos(const size_t position)
+    void checkPos(const size_t position, const char *methodName)
     {
         if (position < 0 || position >= this->length())
         {
-            subError();
+            subError(methodName);
         }
     }
 
@@ -64,7 +66,7 @@ public:
     */
     T at(const size_t position)
     {
-        checkPos(position);
+        checkPos(position, "at()");
 
         Node<T> *current = head;
 
@@ -112,14 +114,17 @@ public:
     }
 
     /*!
-    * \brief Inserts a new element at the position given, cannot insert a new last element
+    * \brief Inserts a new element at the position given, the element gets inserted before the old element at the given position
     * 
     * \param position position where new element will be inserted, it's inserted before the element that used to have this position
     * \param value value of the element to be inserted
     */
     void insert(const size_t position, const T value)
     {
-        checkPos(position);
+        if (position != 0)
+        {
+            checkPos(position - 1, "insert()");
+        }
 
         Node<T> *newNode = new Node<T>(value);
         Node<T> *current = head;
@@ -133,6 +138,11 @@ public:
             head = newNode;
             head->next = current;
             current->prev = head;
+        }
+        else if (position == this->length()) // if inserting at end
+        {
+            push_back(value);
+            --listSize; // this is needed because push_back increases the size and then it'll get increased again at the end of this method
         }
         else
         {
@@ -190,7 +200,7 @@ public:
     */
     void erase(const size_t position)
     {
-        checkPos(position);
+        checkPos(position, "erase()");
         if (head == nullptr) //if list empty
         {
             subError();
@@ -276,11 +286,13 @@ public:
     void print()
     {
         Node<T> *current = head;
-        while (current != nullptr)
+        std::cout << "[" << current->value;
+        while (current->next != nullptr)
         {
-            std::cout << current->value << std::endl;
             current = current->next;
+            std::cout << ", " << current->value;
         }
+        std::cout << "]\n";
     }
 };
 
