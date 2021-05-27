@@ -31,9 +31,10 @@ public class BPClient
     }
     /**
      * Function that sends a message to the C++ BPSrver
-     * @param receivedString String that wants to be sent to the server
+     * @param stringToSend String that wants to be sent to the server
      */
-    public void SendMsg(string receivedString){
+    public void SendMsg(string stringToSend)
+    {
         byte[] msg = Encoding.ASCII.GetBytes(stringToSend);
         client.Send(msg);
     }
