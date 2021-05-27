@@ -34,7 +34,7 @@ public class BPClient
      * @param receivedString String that wants to be sent to the server
      */
     public void SendMsg(string receivedString){
-        byte[] msg = Encoding.ASCII.GetBytes(stringToSend);
+        byte[] msg = Encoding.ASCII.GetBytes(receivedString);
         client.Send(msg);
     }
     /**
