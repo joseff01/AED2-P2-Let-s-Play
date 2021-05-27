@@ -295,6 +295,13 @@ public:
         --listSize;
     }
 
+    /*!
+     * \brief Replaces the value at the specified position with the newValue given
+     * 
+     * \param position position of the element to be replaced
+     * \param newValue newValue to be assigned to the element
+     * \throws out_of_range if position is out of bounds (position >= length())
+     */
     void replace(const size_t position, T newValue)
     {
         checkPos(position, "replace()");
