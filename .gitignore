@@ -183,3 +183,6 @@ fabric.properties
 
 # outputs
 *.out
+
+#linked list test script
+LinkedList/main.cpp
