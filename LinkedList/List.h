@@ -7,6 +7,10 @@
 #include <string.h>
 #include "Node.h"
 
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
 /*!
  * \brief A doubly-linked list to suffice all your personal vector needs
  * 
@@ -294,6 +298,52 @@ public:
         }
         std::cout << "]\n";
     }
+
+    // json conversion
+    template <typename U>
+    friend void to_json(json &, const List<U> &);
+
+    template <typename U>
+    friend void from_json(const json &, List<U> &);
+    // {
+    //     j.at("name").get_to(p.name);
+    //     j.at("address").get_to(p.address);
+    //     j.at("age").get_to(p.age);
+    // }
 };
+
+/*!
+ * \brief This method defines the implicit conversion from List to nlohmann::basic_json<>. It may only be used for Lists which template type has an implicit conversion to json defined.
+ * 
+ * \param j the json you're trying to convert to
+ * \param l the list which you're converting to json
+ */
+template <typename U>
+void to_json(json &j, const List<U> &l)
+{
+    j = json::array();
+    Node<U> *current = l.head;
+    while (current != nullptr)
+    {
+        j.push_back(current->value);
+        current = current->next;
+    }
+}
+
+/*!
+ * \brief This method defines the implicit conversion from nlohmann::basic_json<> to List<U> using the .get<List<U>>() method. It may only be used for Lists which template type has an implicit conversion to json defined.
+ * 
+ * \tparam U the type of the list to which you're trying to convert
+ * \param j the json from which you're trying to convert to List
+ * \param l the newly created list
+ */
+template <typename U>
+void from_json(const json &j, List<U> &l)
+{
+    for (U element : j)
+    {
+        l.push_back(element);
+    }
+}
 
 #endif
