@@ -25,5 +25,4 @@ HEADERS += \
     GeneticAlgorithm.h \
     GeneticIndividual.h \
     GeneticPopulation.h \
-    GeneticServer.h \
-    json.hpp
+    GeneticServer.h
