@@ -6,8 +6,17 @@
 class GeneticIndividual
 {
 private:
+    /**
+     * @brief geneList List of genes contained in the individual
+     */
     List<int> geneList;
+    /**
+     * @brief fitnessScore Score that shows how close the individual's genes are compared to the desired ones.
+     */
     int fitnessScore;
+    /**
+     * @brief genepoolSize amout of genes stored in each individual
+     */
     int genepoolSize;
 public:
     int calculateFitnessScore();
