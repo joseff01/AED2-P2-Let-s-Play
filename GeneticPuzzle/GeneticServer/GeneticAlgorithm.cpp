@@ -1,10 +1,6 @@
 #include "GeneticAlgorithm.h"
 
 GeneticAlgorithm::GeneticAlgorithm(int PopulationSize, int GenepoolSize): geneticPopulation(PopulationSize,GenepoolSize){
-    desiredOutcome = List<int>();
-    for (int i = 0; i < genepoolSize; i++){
-        desiredOutcome.push_back(i);
-    }
     populationSize = PopulationSize;
     genepoolSize = GenepoolSize;
 }
@@ -18,16 +14,13 @@ void GeneticAlgorithm::executeAlgorithm(){
         generationCounter++;
         std::cout<< "Selecting parents..." << std::endl;
         geneticSelection();
-        /*std::cout<< "Crossover..." << std::endl;
+        std::cout<< "Crossover..." << std::endl;
         geneticCrossover();
         std::cout<< "Mutation..." << std::endl;
         geneticMutation();
+        std::cout<< "Checking success..." << std::endl;
+        endAlgorithmFlag = checkFinalization();
         //create xml of Geneneration
-        if (checkFinalization()){
-            endAlgorithmFlag = true;
-        }
-        */
-        break;
     }
 }
 
@@ -70,13 +63,12 @@ void GeneticAlgorithm::geneticSelection(){
             }
         }
     }
+    std::cout<< "parents:" << std::endl;
     for (int i = 0; i < populationSize; i++){
         List<int> geneList = chosenParents[i].getGeneList();
         std::cout << geneList << " ";
     }
     std::cout << std::endl;
-    std::cout<< "parents:" << std::endl;
-
     geneticPopulation.setIndividualsList(chosenParents);
 }
 
@@ -92,8 +84,15 @@ void GeneticAlgorithm::geneticCrossover(){
             geneListParent1.replace(j, geneListParent2[j]);
             geneListParent2.replace(j, geneListParent1Copy[j]);
         }
-        geneticPopulation.getIndividualsList()[i].setGeneList(geneListParent1);
-        geneticPopulation.getIndividualsList()[i].setGeneList(geneListParent2);
+        std::cout<< crossoverPoint << std::endl;
+        std::cout<< geneListParent1 << std::endl;
+        std::cout<< geneListParent2 << std::endl;
+        GeneticIndividual crossedChild1 = GeneticIndividual(genepoolSize);
+        GeneticIndividual crossedChild2 = GeneticIndividual(genepoolSize);
+        crossedChild1.setGeneList(geneListParent1);
+        crossedChild2.setGeneList(geneListParent2);
+        childrenList.push_back(crossedChild1);
+        childrenList.push_back(crossedChild2);
     }
     //Case if it's an odd number population size
     if (populationSize % 2 == 1){
@@ -105,32 +104,64 @@ void GeneticAlgorithm::geneticCrossover(){
             geneListParent1.replace(j, geneListParent2[j]);
             geneListParent2.replace(j, geneListParent1Copy[j]);
         }
-        geneticPopulation.getIndividualsList()[populationSize-1].setGeneList(geneListParent1);
-        geneticPopulation.getIndividualsList()[0].setGeneList(geneListParent2);
+        std::cout<< crossoverPoint << std::endl;
+        std::cout<< geneListParent1 << std::endl;
+        std::cout<< geneListParent2 << std::endl;
+        GeneticIndividual crossedChild1 = GeneticIndividual(genepoolSize);
+        GeneticIndividual crossedChild2 = GeneticIndividual(genepoolSize);
+        crossedChild1.setGeneList(geneListParent1);
+        crossedChild2.setGeneList(geneListParent2);
+        childrenList.push_back(crossedChild1);
+        childrenList.push_back(crossedChild2);
     }
+    geneticPopulation.setIndividualsList(childrenList);
+    std::cout<< "crossed over children: " << std::endl;
+    for (int i = 0; i < populationSize; i++){
+        List<int> geneList = geneticPopulation.getIndividualsList()[i].getGeneList();
+        std::cout << geneList << " ";
+    }
+    std::cout<< std::endl;
 }
 
 void GeneticAlgorithm::geneticMutation(){
     std::uniform_int_distribution<int> distGenes(0,genepoolSize-1);
-    std::uniform_int_distribution<int> distMutation(1,100);
-    List<GeneticIndividual> childrenList = geneticPopulation.getIndividualsList();
+    std::uniform_int_distribution<int> distMutation(1,20);
+    List<GeneticIndividual> childrenList = List<GeneticIndividual>();
     for (int i = 0; i < populationSize; i++) {
-        List<int> geneList = childrenList[i].getGeneList();
+        GeneticIndividual mutatedChild = GeneticIndividual(genepoolSize);
+        List<int> geneList = geneticPopulation.getIndividualsList()[i].getGeneList();
         for (int j = 0; j < genepoolSize; j++){
-            if (50 == distMutation(mt)){
-                geneList.replace(j, distGenes(mt));
+            int random0to100 = distMutation(mt);
+            std::cout<< random0to100 << " ";
+            if (10 == random0to100){
+                int randomGene = distGenes(mt);
+                std::cout<< std::endl << randomGene << std::endl;
+                geneList.replace(j, randomGene);
             }
+
         }
-        childrenList[i].setGeneList(geneList);
+        mutatedChild.setGeneList(geneList);
+        childrenList.push_back(mutatedChild);
     }
+    std::cout<< std::endl;
     geneticPopulation.setIndividualsList(childrenList);
+    std::cout<< "mutated children: " << std::endl;
+    for (int i = 0; i < populationSize; i++){
+        List<int> geneList = geneticPopulation.getIndividualsList()[i].getGeneList();
+        std::cout << geneList << " ";
+    }
+    std::cout << std::endl;
 }
 
-bool GeneticAlgorithm::checkFinalization()
-{
-    List<GeneticIndividual> childrenList = geneticPopulation.getIndividualsList();
+bool GeneticAlgorithm::checkFinalization(){
+    List<int> desiredOutcome = List<int>();
+    for (int n = 0; n < genepoolSize; n++){
+        desiredOutcome.push_back(n);
+    }
+    std::cout << "desiredOutcome: "<< desiredOutcome << std::endl;
     for (int i = 0; i < populationSize; i++){
-        List<int> geneList = childrenList[i].getGeneList();
+        List<int> geneList = geneticPopulation.getIndividualsList()[i].getGeneList();
+        std::cout << geneList << std::endl;
         for (int j = 0; j < genepoolSize; j++){
             if (j == genepoolSize-1){
                 return true;

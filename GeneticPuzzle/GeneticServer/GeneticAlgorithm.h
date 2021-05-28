@@ -9,7 +9,6 @@ class GeneticAlgorithm
 {
 private:
     GeneticPopulation geneticPopulation;
-    List<int> desiredOutcome;
     bool endAlgorithmFlag = false;
     int populationSize;
     int genepoolSize;
@@ -21,7 +20,7 @@ private:
     void geneticCrossover();
     void geneticMutation();
     bool checkFinalization();
-    // void geneticCrossover
+
 public:
     GeneticAlgorithm(int PopulationSize, int GenepoolSize);
     void executeAlgorithm();

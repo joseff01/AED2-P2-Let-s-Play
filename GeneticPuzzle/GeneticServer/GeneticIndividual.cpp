@@ -36,7 +36,7 @@ List<int> GeneticIndividual::getGeneList() const
     return geneList;
 }
 
-void GeneticIndividual::setGeneList(const List<int> &value)
+void GeneticIndividual::setGeneList(List<int> value)
 {
     geneList = value;
     calculateFitnessScore();

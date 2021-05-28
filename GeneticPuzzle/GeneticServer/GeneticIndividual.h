@@ -14,7 +14,7 @@ public:
     GeneticIndividual(int GenepoolSize);
     GeneticIndividual copyGeneticIndividual();
     List<int> getGeneList() const;
-    void setGeneList(const List<int> &value);
+    void setGeneList(List<int> value);
     int getFitnessScore() const;
     void setFitnessScore(int value);
 };
