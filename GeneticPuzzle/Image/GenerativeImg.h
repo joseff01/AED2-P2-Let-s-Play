@@ -14,14 +14,13 @@ private:
     //! The base image that's worked from
     QImage originalImg;
 
-    //! Pointer to array holding the chunks of the image
-    List<QImage> chunks;
-
     bool isSquare(int n);
 
     bool isPowerOf2(int n);
 
 public:
+    //! Pointer to array holding the chunks of the image
+    List<QImage> chunks;
     GenerativeImg(QImage img, int n);
 
     ~GenerativeImg();
