@@ -1,6 +1,7 @@
 #include "GenerativeImg.h"
 #include <stdexcept>
 #include <math.h>
+#include <QPainter>
 
 /*!
  * \brief Construct a new Generative Img object by giving it an image and the number of chunks you wish it to be split by
@@ -65,7 +66,6 @@ void GenerativeImg::segmentate(int n)
 
     QRect chunkWindow = QRect(0, 0, blockSizeC, blockSizeR); // rect representing the size of a chunk used to extract all the chunks from original image
 
-    int i = 0;
     for (int rowChunk = 0; rowChunk < rows / blockSizeR; rowChunk++)
     {
         chunkWindow.setY(rowChunk * blockSizeR);
@@ -73,7 +73,6 @@ void GenerativeImg::segmentate(int n)
         {
             chunkWindow.setX(columnChunk * blockSizeC);
             this->chunks.push_back(img.copy(chunkWindow));
-            i++;
         }
     }
 }
@@ -148,4 +147,32 @@ size_t GenerativeImg::getNumOfChunks()
 
 QImage GenerativeImg::getFrankenImg(List<int> orderList)
 {
+    if (orderList.length() != this->chunks.length())
+    {
+        throw std::invalid_argument("Error called from getFrankenImg(): Size of list denoting the order of chunks must have a length equal to the number of chunks the original image was segmentated into.");
+    }
+
+    int rows = this->originalImg.height();
+    int columns = this->originalImg.width();
+
+    int blockSizeR = this->chunks[0].height();
+    int blockSizeC = this->chunks[0].width();
+
+    QImage frankenstein(columns, rows, originalImg.format());
+    frankenstein.fill(0);
+    QPainter painter(&frankenstein);
+
+    QRect chunkWindow = QRect(0, 0, blockSizeC, blockSizeR);
+
+    int i = 0;
+    for (int rowChunk = 0; rowChunk < rows / blockSizeR; rowChunk++)
+    {
+        chunkWindow.setY(rowChunk * blockSizeR);
+        for (int columnChunk = 0; columnChunk < columns / blockSizeC; columnChunk++)
+        {
+            chunkWindow.setX(columnChunk * blockSizeC);
+            painter.drawImage(chunkWindow, this->chunks[orderList[i]]);
+            i++;
+        }
+    }
 }
