@@ -76,7 +76,6 @@ public:
 
     List(List<T> const &other) : head(nullptr), last(nullptr), listSize(0)
     {
-        this->listSize = other.listSize;
         Node<T> *current = other.head;
         while (current != nullptr)
         {
@@ -87,7 +86,7 @@ public:
 
     List<T> &operator=(List<T> const &other)
     {
-        this->listSize = other.listSize;
+        this->clear();
         Node<T> *current = other.head;
         while (current != nullptr)
         {
