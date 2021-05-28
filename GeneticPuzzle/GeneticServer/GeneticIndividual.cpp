@@ -15,7 +15,7 @@ GeneticIndividual::GeneticIndividual(int GenepoolSize)
 
 int GeneticIndividual::calculateFitnessScore()
 {
-    fitnessScore = 0;
+    fitnessScore = 1;
     for (int i = 0; i < genepoolSize; i++){
         if (geneList[i] == i){
             fitnessScore++;
@@ -45,4 +45,9 @@ void GeneticIndividual::setGeneList(const List<int> &value)
 int GeneticIndividual::getFitnessScore() const
 {
     return fitnessScore;
+}
+
+void GeneticIndividual::setFitnessScore(int value)
+{
+    fitnessScore = value;
 }

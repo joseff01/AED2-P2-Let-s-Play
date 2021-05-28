@@ -16,7 +16,7 @@ public:
     List<int> getGeneList() const;
     void setGeneList(const List<int> &value);
     int getFitnessScore() const;
-
+    void setFitnessScore(int value);
 };
 
 #endif // GENETICINDIVIDUAL_H
