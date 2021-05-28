@@ -11,22 +11,25 @@ GeneticAlgorithm::GeneticAlgorithm(int PopulationSize, int GenepoolSize): geneti
 
 /**
  * @brief GeneticAlgorithm::executeAlgorithm Main algorithm in charge of executiong the entire genetic algorithm.
+ * @param maxIterations Max allowed iterations of the algorithm
  */
-void GeneticAlgorithm::executeAlgorithm(){
+void GeneticAlgorithm::executeAlgorithm(int maxIterations){
     removeOldXML();
     generationCounter = 0;
-    showGeneration();
     generateGenerationXML();
     while(!endAlgorithmFlag){
+        if (maxIterations == generationCounter){
+            return;
+        }
         showGeneration();
         generationCounter++;
-        std::cout<< "Selecting parents..." << std::endl;
+        //std::cout<< "Selecting parents..." << std::endl;
         geneticSelection();
-        std::cout<< "Crossover..." << std::endl;
+        //std::cout<< "Crossover..." << std::endl;
         geneticCrossover();
-        std::cout<< "Mutation..." << std::endl;
+        //std::cout<< "Mutation..." << std::endl;
         geneticMutation();
-        std::cout<< "Checking success..." << std::endl;
+        //std::cout<< "Checking success..." << std::endl;
         generateGenerationXML();
         endAlgorithmFlag = checkFinalization();
     }
@@ -47,25 +50,25 @@ void GeneticAlgorithm::showGeneration()
  * It uses the fitness proportionate selection (FPS) to find which parents to use.
  */
 void GeneticAlgorithm::geneticSelection(){
-    std::cout<< "calculating sumOfFitness..." << std::endl;
+    //std::cout<< "calculating sumOfFitness..." << std::endl;
     int sumOfFitness = geneticPopulation.sumOfFitnesses();
-    std::cout<< "sumOfFitness: " << sumOfFitness << std::endl;
+    //std::cout<< "sumOfFitness: " << sumOfFitness << std::endl;
     List<float> listOfProbabilities = List<float>();
     List<GeneticIndividual> listIndividuals = geneticPopulation.getIndividualsList();
-    std::cout<< "calculating probabilities..." << std::endl;
+    //std::cout<< "calculating probabilities..." << std::endl;
     for (int i = 0; i < populationSize; i++){
         float probability = (float)listIndividuals[i].getFitnessScore()/(float)sumOfFitness;
         listOfProbabilities.push_back(probability);
     }
-    std::cout<< "probabilities: " << listOfProbabilities << std::endl;
+    //std::cout<< "probabilities: " << listOfProbabilities << std::endl;
     List<GeneticIndividual> chosenParents = List<GeneticIndividual>();
     std::uniform_real_distribution<float> dist(0,1);
     float probabilitySum = 0;
-    std::cout<< "selecting parents..."<< std::endl;
+    //std::cout<< "selecting parents..."<< std::endl;
     while(chosenParents.length() < (populationSize)){
         probabilitySum = 0;
         float chosenPoint = dist(mt);
-        std::cout<< "chosenPoint: " << chosenPoint << std::endl;
+        //std::cout<< "chosenPoint: " << chosenPoint << std::endl;
         for (int j = 0; j < populationSize; j++){
             probabilitySum = probabilitySum + listOfProbabilities[j];
             if (probabilitySum > chosenPoint){
@@ -76,9 +79,9 @@ void GeneticAlgorithm::geneticSelection(){
             }
         }
     }
-    std::cout<< "parents:" << std::endl;
+    //std::cout<< "parents:" << std::endl;
 
-    std::cout << std::endl;
+    //std::cout << std::endl;
     geneticPopulation.setIndividualsList(chosenParents);
     showGeneration();
 }
@@ -103,9 +106,9 @@ void GeneticAlgorithm::geneticCrossover(){
             geneListParent1.replace(j, geneListParent2[j]);
             geneListParent2.replace(j, geneListParent1Copy[j]);
         }
-        std::cout<< crossoverPoint << std::endl;
-        std::cout<< geneListParent1 << std::endl;
-        std::cout<< geneListParent2 << std::endl;
+        //std::cout<< crossoverPoint << std::endl;
+        //std::cout<< geneListParent1 << std::endl;
+        //std::cout<< geneListParent2 << std::endl;
         //creating a pair of empty individuals to store the gene lists
         GeneticIndividual crossedChild1 = GeneticIndividual(genepoolSize);
         GeneticIndividual crossedChild2 = GeneticIndividual(genepoolSize);
@@ -132,9 +135,9 @@ void GeneticAlgorithm::geneticCrossover(){
     }
     //setting the newly made list of crossed children as the new population
     geneticPopulation.setIndividualsList(childrenList);
-    std::cout<< "crossed over children: " << std::endl;
+    //std::cout<< "crossed over children: " << std::endl;
     showGeneration();
-    std::cout<< std::endl;
+    //std::cout<< std::endl;
 }
 /**
  * @brief GeneticAlgorithm::geneticMutation Mutation algorithm in charge of mutating 5% of the time each gene from an individual
@@ -156,12 +159,12 @@ void GeneticAlgorithm::geneticMutation(){
         for (int j = 0; j < genepoolSize; j++){
             //random int between 1 and 20
             int randomMutationRate = distMutation(mt);
-            std::cout<< randomMutationRate << " ";
+            //std::cout<< randomMutationRate << " ";
             //if the number is a 10, it will mutate
             if (10 == randomMutationRate){
                 //random gene
                 int randomGene = distGenes(mt);
-                std::cout<< std::endl << randomGene << std::endl;
+                //std::cout<< std::endl << randomGene << std::endl;
                 //replacing the old gene for the mutated one
                 geneList.replace(j, randomGene);
             }
@@ -172,10 +175,10 @@ void GeneticAlgorithm::geneticMutation(){
         //adding said children to the list of mutated children
         childrenList.push_back(mutatedChild);
     }
-    std::cout<< std::endl;
+    //std::cout<< std::endl;
     //setting the new mutated children list as the main population
     geneticPopulation.setIndividualsList(childrenList);
-    std::cout<< "mutated children: " << std::endl;
+    //std::cout<< "mutated children: " << std::endl;
     showGeneration();
 
 }
@@ -189,12 +192,12 @@ bool GeneticAlgorithm::checkFinalization(){
     for (int n = 0; n < genepoolSize; n++){
         desiredOutcome.push_back(n);
     }
-    std::cout << "desiredOutcome: "<< desiredOutcome << std::endl;
+    //std::cout << "desiredOutcome: "<< desiredOutcome << std::endl;
     //loop for each current individual
     for (int i = 0; i < populationSize; i++){
         //loop for each gene in a genelist of an individual
         List<int> geneList = geneticPopulation.getIndividualsList()[i].getGeneList();
-        std::cout << geneList << std::endl;
+        //std::cout << geneList << std::endl;
         for (int j = 0; j < genepoolSize; j++){
             //if it goes through all genes without exiting, it means it found the correct genelist
             if (j == genepoolSize-1){

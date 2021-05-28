@@ -50,11 +50,11 @@ private:
     void geneticMutation();
     bool checkFinalization();
     void generateGenerationXML();
-    void removeOldXML();
 
 public:
     GeneticAlgorithm(int PopulationSize, int GenepoolSize);
-    void executeAlgorithm();
+    void executeAlgorithm(int maxIterations);
+    void removeOldXML();
 };
 
 #endif // GENETICALGORITHM_H

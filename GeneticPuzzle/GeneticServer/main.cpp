@@ -11,7 +11,8 @@ int main()
     delete (geneticServer); //Para que Qt deje de llorar por memory leaks
     */
 
-    GeneticAlgorithm geneticAlgorithm(10,8);
-    geneticAlgorithm.executeAlgorithm();
+    GeneticAlgorithm geneticAlgorithm(10,16);
+    geneticAlgorithm.removeOldXML();
+    //geneticAlgorithm.executeAlgorithm(5000);
 
 }
