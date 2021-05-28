@@ -14,25 +14,40 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,13">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,6">
         <item>
-         <widget class="QListWidget" name="listWidget"/>
+         <layout class="QVBoxLayout" name="verticalLayout" stretch="5,0,0">
+          <item>
+           <widget class="QListWidget" name="listWidget"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(126, 104, 104);</string>
+            </property>
+            <property name="text">
+             <string>Choose number of divisions</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit">
+            <property name="maxLength">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QWidget" name="widget" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-          </layout>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string/>
+          </property>
          </widget>
         </item>
        </layout>
