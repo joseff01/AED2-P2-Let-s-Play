@@ -1,6 +1,8 @@
 #ifndef GENETICALGORITHM_H
 #define GENETICALGORITHM_H
 #include <random>
+#include <string>
+#include <QDir>
 #include "GeneticIndividual.h"
 #include "GeneticPopulation.h"
 #include "../../LinkedList/List.h"
@@ -48,6 +50,7 @@ private:
     void geneticMutation();
     bool checkFinalization();
     void generateGenerationXML();
+    void removeOldXML();
 
 public:
     GeneticAlgorithm(int PopulationSize, int GenepoolSize);

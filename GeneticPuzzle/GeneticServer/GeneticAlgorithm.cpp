@@ -13,8 +13,10 @@ GeneticAlgorithm::GeneticAlgorithm(int PopulationSize, int GenepoolSize): geneti
  * @brief GeneticAlgorithm::executeAlgorithm Main algorithm in charge of executiong the entire genetic algorithm.
  */
 void GeneticAlgorithm::executeAlgorithm(){
+    removeOldXML();
     generationCounter = 0;
-    //create xml of Gen 0
+    showGeneration();
+    generateGenerationXML();
     while(!endAlgorithmFlag){
         showGeneration();
         generationCounter++;
@@ -25,8 +27,8 @@ void GeneticAlgorithm::executeAlgorithm(){
         std::cout<< "Mutation..." << std::endl;
         geneticMutation();
         std::cout<< "Checking success..." << std::endl;
+        generateGenerationXML();
         endAlgorithmFlag = checkFinalization();
-        //create xml of Geneneration
     }
 }
 /**
@@ -196,7 +198,11 @@ bool GeneticAlgorithm::checkFinalization(){
         for (int j = 0; j < genepoolSize; j++){
             //if it goes through all genes without exiting, it means it found the correct genelist
             if (j == genepoolSize-1){
-                return true;
+                if (desiredOutcome[j] == geneList[j]){
+                    return true;
+                } else{
+                    break;
+                }
             } else if (desiredOutcome[j] == geneList[j]){
                 continue;
             } else{
@@ -206,14 +212,72 @@ bool GeneticAlgorithm::checkFinalization(){
     }
     return false;
 }
-/*
+/**
+ * @brief GeneticAlgorithm::generateGenerationXML Function that creates an XML file at the GenerationXML directory that will save
+ * the information about the current population/generation of individuals.(Genes and fitness values)
+ */
 void GeneticAlgorithm::generateGenerationXML()
 {
+    // Creation of xml document object
     XMLDocument xmlDoc;
+    // Adding the standard Root Node to the xml document
     XMLNode *pRoot = xmlDoc.NewElement("Root");
     xmlDoc.InsertFirstChild(pRoot);
-    XMLElement *pElement = xmlDoc.NewElement("Generations");
-
+    // Creation of the element that will contain the list of genes and the fitness of each individual
+    XMLElement *pElement = xmlDoc.NewElement("Generation");
+    // Getting the list of individuals
+    List<GeneticIndividual> generationList = geneticPopulation.getIndividualsList();
+    // Loop to get each individual into the xml document
+    for (int i = 0; i < populationSize; i++){
+        //Setting the number of the individual
+        std::string IndividualCounterStr = std::to_string(i);
+        std::string IndividualStr = "Individual";
+        IndividualStr.append(IndividualCounterStr);
+        const char * s = IndividualStr.c_str();
+        //Creating pList element that will contain all genes of the individual
+        XMLElement *pList = xmlDoc.NewElement(s);
+        //Creating element with the fitness of the individual
+        XMLElement *pFitness = xmlDoc.NewElement("Fitness");
+        pFitness->SetText(generationList[i].getFitnessScore());
+        //Inserting the fitness into the list of genes
+        pList->InsertEndChild(pFitness);
+        //Getting the list of genes of the individual
+        List<int> geneList = generationList[i].getGeneList();
+        //Loop to get each gene from the individual into the xml document
+        for (int j = 0; j < genepoolSize; j++){
+            //Setting the number of the gene
+            std::string geneCounterStr = std::to_string(j);
+            std::string geneStr = "Gene";
+            geneStr.append(geneCounterStr);
+            const char * n = geneStr.c_str();
+            //Creating the element that will store the gene
+            XMLElement *pListElement = xmlDoc.NewElement(n);
+            pListElement->SetText(geneList[j]);
+            //Inserting gene into the list of genes
+            pList->InsertEndChild(pListElement);
+        }
+        pRoot->InsertEndChild(pList);
+    }
+    //Creation of diferent filenames depending of the current generation counter
+    std::string XMLStr = "../GenerationXML/XMLGeneration";
+    std::string generationCounterStr = std::to_string(generationCounter);
+    XMLStr.append(generationCounterStr);
+    XMLStr.append(".xml");
+    const char * p = XMLStr.c_str();
+    //Saving the file acording to the filepath of GenerationXML defined previously
+    xmlDoc.SaveFile(p);
 }
-*/
+/**
+ * @brief GeneticAlgorithm::removeOldXML Function that removes all previous xml files that are currently in the GenerationXML directory
+ */
+void GeneticAlgorithm::removeOldXML()
+{
+    QDir path("../GenerationXML");
+    path.setNameFilters(QStringList() << "*.xml");
+    path.setFilter(QDir::Files);
+    foreach(QString dirfile, path.entryList()){
+        path.remove(dirfile);
+    }
+}
+
 
