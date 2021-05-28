@@ -4,7 +4,13 @@
 #include "GeneticIndividual.h"
 #include "GeneticPopulation.h"
 #include "../../LinkedList/List.h"
+#include "tinyxml2.h"
 
+using namespace tinyxml2;
+
+/**
+ * @brief The GeneticAlgorithm class Full implementation of the genetic algorithm in charge of finding the correct genetic sequence
+ */
 class GeneticAlgorithm
 {
 private:
@@ -41,6 +47,7 @@ private:
     void geneticCrossover();
     void geneticMutation();
     bool checkFinalization();
+    void generateGenerationXML();
 
 public:
     GeneticAlgorithm(int PopulationSize, int GenepoolSize);

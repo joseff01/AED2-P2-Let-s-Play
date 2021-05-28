@@ -15,7 +15,7 @@ private:
     /**
      * Matrix received from the client, contains the obstacles, start and finish.
      */
-    int receivedElementsMatrix[7][9]{};
+    int receivedElementsMatrix[7][11]{};
     /**
      * Empty Base matrix which will be filled with the first found path when the function find path is called
      */
@@ -24,7 +24,7 @@ private:
     bool recursivePathing(const int initialPoint[2]);
 public:
     BacktrackingAlgorithm();
-    int** findPath(int elementsMatrix[7][9]);
+    int** findPath(int elementsMatrix[7][11]);
 };
 
 

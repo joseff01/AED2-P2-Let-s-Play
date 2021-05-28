@@ -2,7 +2,9 @@
 #define GENETICINDIVIDUAL_H
 #include <random>
 #include "../../LinkedList/List.h"
-
+/**
+ * @brief The GeneticIndividual class A single individual of the Population used for the genetic algorithm. Stores a genetic list.
+ */
 class GeneticIndividual
 {
 private:

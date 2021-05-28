@@ -8,6 +8,7 @@ CONFIG -= app_bundle
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        ../../lib/tinyxml2.cpp \
         GeneticAlgorithm.cpp \
         GeneticIndividual.cpp \
         GeneticPopulation.cpp \
@@ -22,6 +23,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ../../LinkedList/List.h \
     ../../LinkedList/Node.h \
+    ../../lib/json.hpp \
+    ../../lib/tinyxml2.h \
     GeneticAlgorithm.h \
     GeneticIndividual.h \
     GeneticPopulation.h \

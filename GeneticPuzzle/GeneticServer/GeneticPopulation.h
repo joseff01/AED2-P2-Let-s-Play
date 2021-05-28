@@ -1,7 +1,9 @@
 #ifndef GENETICPOPULATION_H
 #define GENETICPOPULATION_H
 #include "GeneticIndividual.h"
-
+/**
+ * @brief The GeneticPopulation class Population class that stores all the individuals
+ */
 class GeneticPopulation
 {
 private:

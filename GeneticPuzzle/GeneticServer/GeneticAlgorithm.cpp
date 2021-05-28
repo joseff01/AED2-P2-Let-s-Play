@@ -179,7 +179,7 @@ void GeneticAlgorithm::geneticMutation(){
 }
 /**
  * @brief GeneticAlgorithm::checkFinalization Function in charge of checking if the desired genelist was created
- * @return
+ * @return boolean value. Returns true if an individual matches the desired outcome and false if none do.
  */
 bool GeneticAlgorithm::checkFinalization(){
     //creation of the desired genelist
@@ -206,5 +206,14 @@ bool GeneticAlgorithm::checkFinalization(){
     }
     return false;
 }
+/*
+void GeneticAlgorithm::generateGenerationXML()
+{
+    XMLDocument xmlDoc;
+    XMLNode *pRoot = xmlDoc.NewElement("Root");
+    xmlDoc.InsertFirstChild(pRoot);
+    XMLElement *pElement = xmlDoc.NewElement("Generations");
 
+}
+*/
 
