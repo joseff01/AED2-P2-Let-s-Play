@@ -5,8 +5,17 @@
 class GeneticPopulation
 {
 private:
+    /**
+     * @brief populationSize amout of individuals in the poipulation
+     */
     int populationSize;
+    /**
+     * @brief genepoolSize amout of genes stored in each individual
+     */
     int genepoolSize;
+    /**
+     * @brief individualsList List of all individuals stored in the population
+     */
     List<GeneticIndividual> individualsList;
 
 public:
