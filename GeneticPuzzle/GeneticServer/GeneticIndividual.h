@@ -1,17 +1,22 @@
 #ifndef GENETICINDIVIDUAL_H
 #define GENETICINDIVIDUAL_H
+#include <random>
 #include "../../LinkedList/List.h"
 
 class GeneticIndividual
 {
 private:
-    List<int> *geneList;
+    List<int> geneList;
     int fitnessScore;
     int genepoolSize;
 public:
     int calculateFitnessScore();
     GeneticIndividual(int GenepoolSize);
-    List<int> *getGeneList() const;
+    GeneticIndividual copyGeneticIndividual();
+    List<int> getGeneList() const;
+    void setGeneList(const List<int> &value);
+    int getFitnessScore() const;
+
 };
 
 #endif // GENETICINDIVIDUAL_H
