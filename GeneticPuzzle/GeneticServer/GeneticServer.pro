@@ -26,3 +26,5 @@ HEADERS += \
     GeneticIndividual.h \
     GeneticPopulation.h \
     GeneticServer.h
+
+INCLUDEPATH+=../../lib/
