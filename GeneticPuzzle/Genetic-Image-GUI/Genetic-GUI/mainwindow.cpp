@@ -32,7 +32,7 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
     QImage image(item->text());
 
-    //GenerativeImg *newImage = new GenerativeImg(image,4);
+    GenerativeImg *newImage = new GenerativeImg(image,4);
 
     QPixmap pm = QPixmap::fromImage(image);
     ui->label->setPixmap(pm);

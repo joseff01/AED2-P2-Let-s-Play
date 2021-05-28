@@ -10,10 +10,12 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp\
+    ../../Image/GenerativeImg.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h\
+    ../../Image/GenerativeImg.h
 
 FORMS += \
     mainwindow.ui
