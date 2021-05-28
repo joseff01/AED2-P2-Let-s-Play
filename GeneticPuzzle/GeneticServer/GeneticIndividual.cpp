@@ -11,6 +11,11 @@ GeneticIndividual::GeneticIndividual(int GenepoolSize)
     calculateFitnessScore();
 }
 
+int GeneticIndividual::getFitnessScore() const
+{
+    return fitnessScore;
+}
+
 int GeneticIndividual::calculateFitnessScore()
 {
     fitnessScore = 0;
