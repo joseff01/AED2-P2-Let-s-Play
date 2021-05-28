@@ -29,6 +29,8 @@ public:
     QImage getOriginalImg();
 
     size_t getNumOfChunks();
+
+    QImage getFrankenImg(List<int> orderList);
 };
 
 #endif

@@ -145,3 +145,7 @@ size_t GenerativeImg::getNumOfChunks()
 {
     return this->chunks.length();
 }
+
+QImage GenerativeImg::getFrankenImg(List<int> orderList)
+{
+}
