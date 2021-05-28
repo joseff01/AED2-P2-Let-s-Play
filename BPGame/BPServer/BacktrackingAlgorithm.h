@@ -1,6 +1,7 @@
 #ifndef BPSERVER_BACKTRACKINGALGORITHM_H
 #define BPSERVER_BACKTRACKINGALGORITHM_H
 
+#include "MapConstants.h"
 
 class BacktrackingAlgorithm {
 private:
@@ -15,16 +16,16 @@ private:
     /**
      * Matrix received from the client, contains the obstacles, start and finish.
      */
-    int receivedElementsMatrix[7][11]{};
+    int receivedElementsMatrix[MAPROWS][MAPCOLUMNS]{};
     /**
      * Empty Base matrix which will be filled with the first found path when the function find path is called
      */
-    int** basePathMatrix = new int*[7];
+    int** basePathMatrix = new int*[MAPROWS];
     void basePathMatrixAssignation();
     bool recursivePathing(const int initialPoint[2]);
 public:
     BacktrackingAlgorithm();
-    int** findPath(int elementsMatrix[7][11]);
+    int** findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS]);
 };
 
 
