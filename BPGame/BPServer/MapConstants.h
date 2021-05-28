@@ -4,5 +4,4 @@
 const int MAPROWS       = 7;
 const int MAPCOLUMNS    = 11;
 
-
 #endif
