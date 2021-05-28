@@ -93,6 +93,7 @@ public:
             this->push_back(current->value);
             current = current->next;
         }
+        return *this;
     }
 
     //! Calls the clear method, deleting it's contents
