@@ -13,6 +13,7 @@
 GenerativeImg::GenerativeImg(QImage img, int n)
 {
     this->chunks = List<QImage>(); // initialize empty linked list
+    this->originalImg = img.copy();
 
     if (n <= 2)
     {
@@ -24,7 +25,7 @@ GenerativeImg::GenerativeImg(QImage img, int n)
         throw std::invalid_argument("Number of chunks is neither a perfect square nor a power of 2 (for a power greater than 1)");
     }
 
-    segmentate(n);
+    segmentate(img, n);
 }
 
 //! Destroy the Generative Img:: Generative Img object
@@ -38,10 +39,8 @@ GenerativeImg::~GenerativeImg()
  * 
  * \param n number of chunks you wish the image to split in, MUST BE a square number or any power of 2 (greater than 0)
  */
-void GenerativeImg::segmentate(int n)
+void GenerativeImg::segmentate(QImage img, int n)
 {
-    QImage img = this->originalImg;
-
     int rows = img.height();
     int columns = img.width();
 
@@ -183,4 +182,5 @@ QImage GenerativeImg::getFrankenImg(List<int> orderList)
             i++;
         }
     }
+    return frankenstein;
 }

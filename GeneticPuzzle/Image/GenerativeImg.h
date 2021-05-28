@@ -9,7 +9,7 @@ class GenerativeImg
 private:
     /* data */
 
-    void segmentate(int n);
+    void segmentate(QImage img, int n);
 
     //! The base image that's worked from
     QImage originalImg;
@@ -23,6 +23,8 @@ private:
 
 public:
     GenerativeImg(QImage img, int n);
+
+    ~GenerativeImg();
 
     QImage *getChunks();
 
