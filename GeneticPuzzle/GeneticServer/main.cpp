@@ -12,7 +12,7 @@ int main()
     */
 
     GeneticAlgorithm geneticAlgorithm(10,16);
-    geneticAlgorithm.removeOldXML();
-    //geneticAlgorithm.executeAlgorithm(5000);
+    //geneticAlgorithm.removeOldXML();
+    geneticAlgorithm.executeAlgorithm(5000);
 
 }
