@@ -1,8 +1,10 @@
 #include <iostream>
 #include "BPServer.h"
 #include "BacktrackingAlgorithm.h"
+#include "AStarAlgorithm.h"
 
-int main() {
+int main()
+{
     /*auto* backtrackingAlgorithm = new BacktrackingAlgorithm();
     int a[7][9] = {{0,0,0,0,1,0,0,0,0},{0,0,0,0,1,0,0,0,0},{0,0,0,0,1,0,0,0,0},{2,0,0,0,1,0,0,0,3},{0,0,0,0,1,0,0,0,0},{0,0,0,0,1,0,0,0,0},{0,0,0,1,0,0,0,0,0}};
     int** i = backtrackingAlgorithm->findPath(a);
@@ -14,6 +16,6 @@ int main() {
     }
     std::cout << std::endl;
      */
-    BPServer* geneticServer = new BPServer();
+    BPServer *geneticServer = new BPServer();
     return 0;
 }

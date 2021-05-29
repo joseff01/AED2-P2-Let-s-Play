@@ -26,20 +26,71 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
     {
         for (int j = 0; j < MAPCOLUMNS; j++)
         {
-            receivedElementsMatrix[i][j] = elementsMatrix[i][j];
-            basePathMatrix[i][j] = 0;
+            this->receivedElementsMatrix[i][j] = elementsMatrix[i][j];
+            this->basePathMatrix[i][j] = 0;
+
+            ANode current;
+            current.x = j;
+            current.y = i;
+
+            int coords[2] = {i, j};
+
+            int index = coordsToIndex(coords);
+
             if (elementsMatrix[i][j] == 3)
             {
-                initialPoint[0] = i;
-                initialPoint[1] = j;
+                current.visited = true;
+                this->closedList.push_back(index);
+                this->nodes.push_back(current);
+                this->startNode = &this->nodes[index];
             }
-            if (elementsMatrix[i][j] == 2)
+            else if (elementsMatrix[i][j] == 2)
             {
-                this->finalPoint[0] = i;
-                this->finalPoint[1] = j;
+                this->nodes.push_back(current);
+                this->finalNode = &this->nodes[index];
+            }
+            else if (elementsMatrix[i][j] == 1)
+            {
+                current.obstacle = true;
+                this->nodes.push_back(current);
+            }
+            else
+            {
+                this->nodes.push_back(current);
             }
         }
     }
+    for (int i = 0; i < MAPROWS; i++)
+    {
+        for (int j = 0; j < MAPCOLUMNS; j++)
+        {
+            int coords[2] = {i, j};
+            int index = coordsToIndex(coords);
+            if (i > 0)
+                nodes[index].neighbors.push_back(nodes[(i - 1) * MAPROWS + (j)]);
+            if (i < MAPROWS - 1)
+                nodes[index].neighbors.push_back(nodes[(i + 1) * MAPROWS + (j)]);
+            if (j > 0)
+                nodes[index].neighbors.push_back(nodes[(i)*MAPCOLUMNS + (j - 1)]);
+            if (j < MAPCOLUMNS - 1)
+                nodes[index].neighbors.push_back(nodes[(i)*MAPCOLUMNS + (j + 1)]);
+
+            // Diagonal connections
+            if (i > 0 && j > 0)
+                nodes[index].neighbors.push_back(nodes[(i - 1) * MAPCOLUMNS + (j - 1)]);
+            if (i < MAPROWS - 1 && j > 0)
+                nodes[index].neighbors.push_back(nodes[(i + 1) * MAPCOLUMNS + (j - 1)]);
+            if (i > 0 && j < MAPCOLUMNS - 1)
+                nodes[index].neighbors.push_back(nodes[(i - 1) * MAPCOLUMNS + (j + 1)]);
+            if (i < MAPROWS - 1 && j < MAPCOLUMNS - 1)
+                nodes[index].neighbors.push_back(nodes[(i + 1) * MAPCOLUMNS + (j + 1)]);
+        }
+    }
+
+    //Setup neighbors
+
+    // add starter neigbors to open list
+
     this->closedList.push_back(coordsToIndex(initialPoint));
     // setup heuristic map
     // execute pathfind
@@ -52,10 +103,10 @@ int AStarAlgorithm::coordsToIndex(int coords[2])
     return row * MAPCOLUMNS + column;
 }
 
-int *AStarAlgorithm::indexToCoords(int index)
+List<int> AStarAlgorithm::indexToCoords(int index)
 {
     int row = (int)index / MAPCOLUMNS;
     int column = index % MAPCOLUMNS;
-    int coords[2] = {row, column};
+    List<int> coords = {row, column};
     return coords;
 }

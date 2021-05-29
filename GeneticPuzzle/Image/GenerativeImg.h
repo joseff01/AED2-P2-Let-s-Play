@@ -25,7 +25,7 @@ public:
 
     ~GenerativeImg();
 
-    QImage *getChunks();
+    // QImage *getChunks();
 
     QImage getOriginalImg();
 
