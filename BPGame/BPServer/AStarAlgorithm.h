@@ -12,11 +12,12 @@ private:
         bool obstacle = false;
         bool visited = false;
         int HValue = 0;
-        int FValue = 0;
+        int FValue = 1000000;
+        int totalDistance = 0;
         int index;
         int x; // column
         int y; // row
-        List<ANode> neighbors;
+        List<ANode *> neighbors;
         ANode *parent = nullptr;
     };
 
@@ -42,7 +43,13 @@ private:
 
     List<int> indexToCoords(int index);
 
-    void addNeighborsToOpenList(ANode node);
+    void addNeighborsToOpenList(ANode *node);
+
+    void AStarPathfind();
+
+    int distance(ANode node1, ANode node2);
+
+    int findMinOpenNode();
 
 public:
     AStarAlgorithm();

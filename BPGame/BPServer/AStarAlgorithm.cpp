@@ -40,16 +40,16 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
 
             this->nodes[index].index = index;
 
-            if (elementsMatrix[i][j] == 3)
+            if (elementsMatrix[i][j] == 3) // start node
             {
-                this->nodes[index].visited = true;
+                this->nodes[index].FValue = 0;
                 this->startNode = &this->nodes[index];
             }
-            else if (elementsMatrix[i][j] == 2)
+            else if (elementsMatrix[i][j] == 2) // end node
             {
                 this->finalNode = &this->nodes[index];
             }
-            else if (elementsMatrix[i][j] == 1)
+            else if (elementsMatrix[i][j] == 1) // obstacle
             {
                 this->nodes[index].obstacle = true;
             }
@@ -66,23 +66,23 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
 
             // Vertica/Horizontal neighbors
             if (i > 0)
-                nodes[index].neighbors.push_back(nodes[(i - 1) * MAPROWS + (j)]);
+                nodes[index].neighbors.push_back(&nodes[(i - 1) * MAPROWS + (j)]);
             if (i < MAPROWS - 1)
-                nodes[index].neighbors.push_back(nodes[(i + 1) * MAPROWS + (j)]);
+                nodes[index].neighbors.push_back(&nodes[(i + 1) * MAPROWS + (j)]);
             if (j > 0)
-                nodes[index].neighbors.push_back(nodes[(i)*MAPCOLUMNS + (j - 1)]);
+                nodes[index].neighbors.push_back(&nodes[(i)*MAPCOLUMNS + (j - 1)]);
             if (j < MAPCOLUMNS - 1)
-                nodes[index].neighbors.push_back(nodes[(i)*MAPCOLUMNS + (j + 1)]);
+                nodes[index].neighbors.push_back(&nodes[(i)*MAPCOLUMNS + (j + 1)]);
 
             // Diagonal neighbors
             if (i > 0 && j > 0)
-                nodes[index].neighbors.push_back(nodes[(i - 1) * MAPCOLUMNS + (j - 1)]);
+                nodes[index].neighbors.push_back(&nodes[(i - 1) * MAPCOLUMNS + (j - 1)]);
             if (i < MAPROWS - 1 && j > 0)
-                nodes[index].neighbors.push_back(nodes[(i + 1) * MAPCOLUMNS + (j - 1)]);
+                nodes[index].neighbors.push_back(&nodes[(i + 1) * MAPCOLUMNS + (j - 1)]);
             if (i > 0 && j < MAPCOLUMNS - 1)
-                nodes[index].neighbors.push_back(nodes[(i - 1) * MAPCOLUMNS + (j + 1)]);
+                nodes[index].neighbors.push_back(&nodes[(i - 1) * MAPCOLUMNS + (j + 1)]);
             if (i < MAPROWS - 1 && j < MAPCOLUMNS - 1)
-                nodes[index].neighbors.push_back(nodes[(i + 1) * MAPCOLUMNS + (j + 1)]);
+                nodes[index].neighbors.push_back(&nodes[(i + 1) * MAPCOLUMNS + (j + 1)]);
 
             // Heuristic calc
             int finalcoords[2] = {(*this->finalNode).y, (*this->finalNode).x};
@@ -92,12 +92,25 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
         }
     }
 
-    // Setup starting openList nodes (initial node nei)
-    addNeighborsToOpenList(*(this->startNode));
-
     // execute pathfind
+    AStarPathfind();
 
     // transform parent chain to incremental numbers in elementsMatrix
+    int c = 1;
+    ANode *p = finalNode;
+    while (p->parent != nullptr)
+    {
+        p = p->parent;
+        c++;
+    }
+
+    p = finalNode;
+    while (p->parent != nullptr)
+    {
+        basePathMatrix[p->y][p->x] = c;
+        p = p->parent;
+        c--;
+    }
 
     return this->basePathMatrix;
 }
@@ -117,17 +130,62 @@ List<int> AStarAlgorithm::indexToCoords(int index)
     return coords;
 }
 
-void AStarAlgorithm::addNeighborsToOpenList(ANode node)
+void AStarAlgorithm::addNeighborsToOpenList(ANode *currentNode)
 {
-    for (int i = 0; i < node.neighbors.length(); i++)
+    for (int i = 0; i < currentNode->neighbors.length(); i++)
     {
-        const ANode neighbor = node.neighbors[i];
-        if (neighbor.visited == false)
+        ANode *neighbor = currentNode->neighbors[i];
+        if (neighbor->visited == false && neighbor->obstacle == false)
         {
-            if (openList.find(neighbor.index) != -1)
+            if (openList.find(neighbor->index) == -1) // this means neighbor's index is NOT in openList yet
             {
-                openList.push_back(neighbor.index);
+                openList.push_back(neighbor->index);
             }
         }
+
+        int possibleFValue = currentNode->FValue + distance(*currentNode, *neighbor);
+
+        if (possibleFValue < neighbor->FValue)
+        {
+            neighbor->parent = currentNode;
+            neighbor->totalDistance = currentNode->totalDistance + distance(*currentNode, *neighbor);
+            neighbor->FValue = neighbor->totalDistance + neighbor->HValue;
+        }
+    }
+}
+
+int AStarAlgorithm::distance(ANode node1, ANode node2)
+{
+    return (int)(sqrt(pow(node1.x - node2.x, 2) + pow(node1.y - node2.y, 2)) * 10);
+}
+
+int AStarAlgorithm::findMinOpenNode()
+{
+    int minIndex = 0;
+    for (int i = 0; i < this->openList.length(); i++)
+    {
+        if (nodes[openList[i]].FValue < nodes[minIndex].FValue)
+        {
+            minIndex = openList[i];
+        }
+    }
+    return minIndex;
+}
+
+void AStarAlgorithm::AStarPathfind()
+{
+    ANode *current = this->startNode;
+    while (current != finalNode)
+    {
+        current->visited = true;
+        addNeighborsToOpenList(current);
+
+        int nextNodeIndex = findMinOpenNode();
+
+        int OpenListRemoveIndex = this->openList.find(nextNodeIndex);
+        this->openList.erase(OpenListRemoveIndex);
+        this->closedList.push_back(nextNodeIndex);
+
+        current = &nodes[nextNodeIndex];
     }
 }
