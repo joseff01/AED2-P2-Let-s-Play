@@ -15,8 +15,8 @@ AStarAlgorithm::AStarAlgorithm()
 
 /**
  * \brief Returns the matrix with the shortest path it found to get from the start to the finish indicated by elementsMatrix.
- * This function DOES NOT do the actual finding of the path, it only sets up the initial conditions and makes the recursive call to
- * the function recursivePathing.
+ * This function DOES NOT do the actual finding of the path, it sets up the initial conditions and transforms the matrix of nodes 
+ * into a matrix of ints detailing the shortest path from start to finish.
  * @param elementsMatrix Matrix received from the client with the obstacles (1) the start (3) and the finish (2) of the game board
  * @return basePathMatrix Matrix with the first found path from the start to the finish indicated by the 3 and 2 respectively in elementsMatrix
  */
@@ -116,6 +116,12 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
     return this->basePathMatrix;
 }
 
+/*!
+ * \brief Transform an array representing 2D coordinates to their index for the map used by the algorithm
+ * 
+ * \param coords an int array consisting or {row, column} 
+ * \return int the index of the node at the given coordinates
+ */
 int AStarAlgorithm::coordsToIndex(int coords[2])
 {
     int row = coords[0];
@@ -123,6 +129,12 @@ int AStarAlgorithm::coordsToIndex(int coords[2])
     return row * MAPCOLUMNS + column;
 }
 
+/*!
+ * \brief Transforms a given index for a node in the map used by this algorithm to the respective coordinates
+ * 
+ * \param index the index of the node for which coordinates you want to find
+ * \return List<int> a list with format {row, column}
+ */
 List<int> AStarAlgorithm::indexToCoords(int index)
 {
     int row = (int)index / MAPCOLUMNS;
@@ -131,6 +143,11 @@ List<int> AStarAlgorithm::indexToCoords(int index)
     return coords;
 }
 
+/*!
+ * \brief Method in charge of adding the (indexes of) unvisited nodes that neighbor a given node to the openList
+ * 
+ * \param currentNode the node for which you want to add the neighbors to openList
+ */
 void AStarAlgorithm::addNeighborsToOpenList(ANode *currentNode)
 {
     for (int i = 0; i < currentNode->neighbors.length(); i++)
@@ -158,11 +175,23 @@ void AStarAlgorithm::addNeighborsToOpenList(ANode *currentNode)
     }
 }
 
+/*!
+ * \brief Calculates the distance between 2 given ondes using pythagoras theorem (and then flooring it to get an int)
+ * 
+ * \param node1
+ * \param node2 
+ * \return int of the given distance between the given nodes
+ */
 int AStarAlgorithm::distance(ANode node1, ANode node2)
 {
     return (int)(sqrt(pow(node1.x - node2.x, 2) + pow(node1.y - node2.y, 2)) * 10);
 }
 
+/*!
+ * \brief Finds the (index of) the node in the openList that currently has the lowest F value
+ * 
+ * \return int the index of the node with the lowest value in the openList
+ */
 int AStarAlgorithm::findMinOpenNode()
 {
     int minIndex = -1;
@@ -186,6 +215,7 @@ int AStarAlgorithm::findMinOpenNode()
     return minIndex;
 }
 
+//! Method in charge of carrying out the process of linking the final node to the parent node with the shortest path possible
 void AStarAlgorithm::AStarPathfind()
 {
     ANode *current = this->startNode;

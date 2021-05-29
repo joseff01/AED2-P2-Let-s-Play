@@ -4,9 +4,11 @@
 #include "List.h"
 #include "MapConstants.h"
 
+//! Class in charge of carrying out the A* Pathfinding algorithm
 class AStarAlgorithm
 {
 private:
+    //! struct used to represent the nodes on the map for the pathfinding algorithm
     struct ANode
     {
         bool obstacle = false;
@@ -27,10 +29,13 @@ private:
     //! Node where algorightm starts
     ANode *startNode;
 
+    //! The list of nodes that have already been visited
     List<int> closedList;
 
+    //! The list of nodes that are currently considered to be visited
     List<int> openList;
 
+    //! The matrix of nodes
     ANode *nodes = nullptr;
 
     //! Matrix received from the client, contains the obstacles, start and finish.
