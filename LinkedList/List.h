@@ -135,6 +135,29 @@ public:
         return at(position);
     }
 
+    /*!
+     * \brief Searches the list for the given value (must have operator== defined), and if not found returns -1
+     * 
+     * \param searchVal value to be looked for
+     * \return int the index position of the value (if found, if not found it's just -1)
+     */
+    int find(const T searchVal)
+    {
+        Node<T> *current = head;
+
+        int position = -1;
+
+        for (int i = 0; i < this->length(); i++)
+        {
+            if (this->at(i) == searchVal)
+            {
+                position = i;
+                break;
+            }
+        }
+        return position;
+    }
+
     // insert/delete
 
     /*!
