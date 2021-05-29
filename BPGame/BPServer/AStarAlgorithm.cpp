@@ -1,5 +1,6 @@
 #include "AStarAlgorithm.h"
 #include "math.h"
+#include <stdexcept>
 
 /**
  * \brief Contructor sets up the multidimensional matrix basePathMatrix
@@ -66,9 +67,9 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
 
             // Vertica/Horizontal neighbors
             if (i > 0)
-                nodes[index].neighbors.push_back(&nodes[(i - 1) * MAPROWS + (j)]);
+                nodes[index].neighbors.push_back(&nodes[(i - 1) * MAPCOLUMNS + (j)]);
             if (i < MAPROWS - 1)
-                nodes[index].neighbors.push_back(&nodes[(i + 1) * MAPROWS + (j)]);
+                nodes[index].neighbors.push_back(&nodes[(i + 1) * MAPCOLUMNS + (j)]);
             if (j > 0)
                 nodes[index].neighbors.push_back(&nodes[(i)*MAPCOLUMNS + (j - 1)]);
             if (j < MAPCOLUMNS - 1)
@@ -96,16 +97,16 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
     AStarPathfind();
 
     // transform parent chain to incremental numbers in elementsMatrix
-    int c = 1;
+    int c = 0;
     ANode *p = finalNode;
-    while (p->parent != nullptr)
+    while (p != nullptr)
     {
         p = p->parent;
         c++;
     }
 
     p = finalNode;
-    while (p->parent != nullptr)
+    while (p != nullptr)
     {
         basePathMatrix[p->y][p->x] = c;
         p = p->parent;
@@ -135,21 +136,24 @@ void AStarAlgorithm::addNeighborsToOpenList(ANode *currentNode)
     for (int i = 0; i < currentNode->neighbors.length(); i++)
     {
         ANode *neighbor = currentNode->neighbors[i];
-        if (neighbor->visited == false && neighbor->obstacle == false)
+        if (neighbor->obstacle == false)
         {
-            if (openList.find(neighbor->index) == -1) // this means neighbor's index is NOT in openList yet
+            if (neighbor->visited == false)
             {
-                openList.push_back(neighbor->index);
+                if (openList.find(neighbor->index) == -1) // this means neighbor's index is NOT in openList yet
+                {
+                    openList.push_back(neighbor->index);
+                }
             }
-        }
 
-        int possibleFValue = currentNode->FValue + distance(*currentNode, *neighbor);
+            int possibleFValue = currentNode->FValue + distance(*currentNode, *neighbor);
 
-        if (possibleFValue < neighbor->FValue)
-        {
-            neighbor->parent = currentNode;
-            neighbor->totalDistance = currentNode->totalDistance + distance(*currentNode, *neighbor);
-            neighbor->FValue = neighbor->totalDistance + neighbor->HValue;
+            if (possibleFValue < neighbor->FValue)
+            {
+                neighbor->parent = currentNode;
+                neighbor->totalDistance = currentNode->totalDistance + distance(*currentNode, *neighbor);
+                neighbor->FValue = neighbor->totalDistance + neighbor->HValue;
+            }
         }
     }
 }
@@ -161,13 +165,23 @@ int AStarAlgorithm::distance(ANode node1, ANode node2)
 
 int AStarAlgorithm::findMinOpenNode()
 {
-    int minIndex = 0;
-    for (int i = 0; i < this->openList.length(); i++)
+    int minIndex = -1;
+    if (openList.length() > 0)
     {
+        minIndex = openList[0];
+    }
+    for (int i = 1; i < this->openList.length(); i++)
+    {
+        ANode *currentMin = &nodes[openList[i]];
+        ANode *possibleMin = &nodes[minIndex];
         if (nodes[openList[i]].FValue < nodes[minIndex].FValue)
         {
             minIndex = openList[i];
         }
+    }
+    if (minIndex == -1)
+    {
+        printf("mik");
     }
     return minIndex;
 }
@@ -181,6 +195,10 @@ void AStarAlgorithm::AStarPathfind()
         addNeighborsToOpenList(current);
 
         int nextNodeIndex = findMinOpenNode();
+        if (nextNodeIndex == -1)
+        {
+            throw std::invalid_argument("No possible path from ball to goal");
+        }
 
         int OpenListRemoveIndex = this->openList.find(nextNodeIndex);
         this->openList.erase(OpenListRemoveIndex);
