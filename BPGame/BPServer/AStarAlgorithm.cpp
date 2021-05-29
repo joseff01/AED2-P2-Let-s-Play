@@ -1,4 +1,5 @@
 #include "AStarAlgorithm.h"
+#include "math.h"
 
 /**
  * \brief Contructor sets up the multidimensional matrix basePathMatrix
@@ -20,8 +21,10 @@ AStarAlgorithm::AStarAlgorithm()
  */
 int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
 {
+    this->nodes = new ANode[MAPCOLUMNS * MAPROWS];
+
     int initialPoint[2];
-    // look for first element position and final element position and add them to closedList
+    // look for first element position and final element position and add initial node to closedList
     for (int i = 0; i < MAPROWS; i++)
     {
         for (int j = 0; j < MAPCOLUMNS; j++)
@@ -29,43 +32,39 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
             this->receivedElementsMatrix[i][j] = elementsMatrix[i][j];
             this->basePathMatrix[i][j] = 0;
 
-            ANode current;
-            current.x = j;
-            current.y = i;
-
             int coords[2] = {i, j};
-
             int index = coordsToIndex(coords);
+
+            this->nodes[index].x = j;
+            this->nodes[index].y = i;
+
+            this->nodes[index].index = index;
 
             if (elementsMatrix[i][j] == 3)
             {
-                current.visited = true;
-                this->closedList.push_back(index);
-                this->nodes.push_back(current);
+                this->nodes[index].visited = true;
                 this->startNode = &this->nodes[index];
             }
             else if (elementsMatrix[i][j] == 2)
             {
-                this->nodes.push_back(current);
                 this->finalNode = &this->nodes[index];
             }
             else if (elementsMatrix[i][j] == 1)
             {
-                current.obstacle = true;
-                this->nodes.push_back(current);
-            }
-            else
-            {
-                this->nodes.push_back(current);
+                this->nodes[index].obstacle = true;
             }
         }
     }
+
+    // Second setup wave
     for (int i = 0; i < MAPROWS; i++)
     {
         for (int j = 0; j < MAPCOLUMNS; j++)
         {
             int coords[2] = {i, j};
             int index = coordsToIndex(coords);
+
+            // Vertica/Horizontal neighbors
             if (i > 0)
                 nodes[index].neighbors.push_back(nodes[(i - 1) * MAPROWS + (j)]);
             if (i < MAPROWS - 1)
@@ -75,7 +74,7 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
             if (j < MAPCOLUMNS - 1)
                 nodes[index].neighbors.push_back(nodes[(i)*MAPCOLUMNS + (j + 1)]);
 
-            // Diagonal connections
+            // Diagonal neighbors
             if (i > 0 && j > 0)
                 nodes[index].neighbors.push_back(nodes[(i - 1) * MAPCOLUMNS + (j - 1)]);
             if (i < MAPROWS - 1 && j > 0)
@@ -84,16 +83,23 @@ int **AStarAlgorithm::findPath(int elementsMatrix[MAPROWS][MAPCOLUMNS])
                 nodes[index].neighbors.push_back(nodes[(i - 1) * MAPCOLUMNS + (j + 1)]);
             if (i < MAPROWS - 1 && j < MAPCOLUMNS - 1)
                 nodes[index].neighbors.push_back(nodes[(i + 1) * MAPCOLUMNS + (j + 1)]);
+
+            // Heuristic calc
+            int finalcoords[2] = {(*this->finalNode).y, (*this->finalNode).x};
+
+            int heuristic = (int)(abs(coords[0] - finalcoords[0]) + abs(coords[1] - finalcoords[1])); //manhattan distance for heuristic
+            nodes[index].HValue = heuristic;
         }
     }
 
-    //Setup neighbors
+    // Setup starting openList nodes (initial node nei)
+    addNeighborsToOpenList(*(this->startNode));
 
-    // add starter neigbors to open list
-
-    this->closedList.push_back(coordsToIndex(initialPoint));
-    // setup heuristic map
     // execute pathfind
+
+    // transform parent chain to incremental numbers in elementsMatrix
+
+    return this->basePathMatrix;
 }
 
 int AStarAlgorithm::coordsToIndex(int coords[2])
@@ -109,4 +115,19 @@ List<int> AStarAlgorithm::indexToCoords(int index)
     int column = index % MAPCOLUMNS;
     List<int> coords = {row, column};
     return coords;
+}
+
+void AStarAlgorithm::addNeighborsToOpenList(ANode node)
+{
+    for (int i = 0; i < node.neighbors.length(); i++)
+    {
+        const ANode neighbor = node.neighbors[i];
+        if (neighbor.visited == false)
+        {
+            if (openList.find(neighbor.index) != -1)
+            {
+                openList.push_back(neighbor.index);
+            }
+        }
+    }
 }

@@ -13,6 +13,7 @@ private:
         bool visited = false;
         int HValue = 0;
         int FValue = 0;
+        int index;
         int x; // column
         int y; // row
         List<ANode> neighbors;
@@ -29,7 +30,7 @@ private:
 
     List<int> openList;
 
-    List<ANode> nodes;
+    ANode *nodes = nullptr;
 
     //! Matrix received from the client, contains the obstacles, start and finish.
     int receivedElementsMatrix[MAPROWS][MAPCOLUMNS]{}; // 7 rows, 11 columns
@@ -40,6 +41,8 @@ private:
     int coordsToIndex(int coords[2]); // coords are always [rows, colums]
 
     List<int> indexToCoords(int index);
+
+    void addNeighborsToOpenList(ANode node);
 
 public:
     AStarAlgorithm();
