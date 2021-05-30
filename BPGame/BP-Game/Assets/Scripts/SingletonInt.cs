@@ -4,6 +4,8 @@ public class SingletonInt
     private static SingletonInt instance;
     public int value;
     public BPClient client;
+    public int right = 0;
+    public int left = 0;
 
     public static SingletonInt Instance
     {
@@ -17,5 +19,13 @@ public class SingletonInt
     private SingletonInt()
     {
         client = new BPClient();
+    }
+    public void setRight(int value)
+    {
+        right = value;
+    }
+    public void setLeft(int value)
+    {
+        left = value;
     }
 }
