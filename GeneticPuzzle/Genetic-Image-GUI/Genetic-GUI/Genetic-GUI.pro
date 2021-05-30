@@ -13,11 +13,16 @@ INCLUDEPATH+= \
 ../../../lib/
 
 SOURCES += \
+    ../../../lib/tinyxml2.cpp \
     main.cpp \
     mainwindow.cpp \
     ../../Image/GenerativeImg.cpp
 
 HEADERS += \
+    ../../../LinkedList/List.h \
+    ../../../LinkedList/Node.h \
+    ../../../lib/json.hpp \
+    ../../../lib/tinyxml2.h \
     mainwindow.h \
     ../../Image/GenerativeImg.h
 
