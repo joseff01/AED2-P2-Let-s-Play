@@ -3,7 +3,6 @@
 #include "../../Image/GenerativeImg.h"
 
 #include <QDir>
-#include <iostream>
 
 //For testing out frankenImg function, can be removed later
 #include <stdlib.h> /* srand, rand */
@@ -20,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    clientSetup();
     QDir dir("../Genetic-GUI/images");
     foreach (QFileInfo var, dir.entryInfoList()) // type of "for loop" in wich shows the files abilable in the specified path
     {
@@ -82,4 +82,73 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
             ui->label->setAlignment(Qt::AlignCenter); // Aligns label in the midle of the widget
         }
     }
+}
+
+/**
+ * @brief MainWindow::clientSetup Funciton in charge of seting up the client side of the connection with the server.
+ * Socket: 5000. Ip: localhost
+ */
+void MainWindow::clientSetup(){
+    int portno = 5000;
+    int option = 1;
+    struct sockaddr_in serv_addr;
+    char const *localHost = "localhost";
+    struct hostent *server;
+
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (setsockopt(sockfd,SOL_SOCKET,SO_REUSEPORT,&option,sizeof(int)) == -1) {
+        perror("setsockopt");
+        exit(1);
+    }
+    if (sockfd < 0)
+      serverError("ERROR opening socket");
+    server = gethostbyname(localHost);
+    if (server == NULL){
+      fprintf(stderr,"ERROR, no such host");
+      exit(0);
+    }
+    memset((char *) &serv_addr, 0, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    memcpy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
+    serv_addr.sin_port = htons(portno);
+    std::cout << "Connecting to mserver..." << std::endl;
+    if (::connect(sockfd,(struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+        serverError("ERROR connecting");
+    }
+}
+
+/**
+ * @brief MainWindow::serverError If an error ocurrs at some point while connecting with the server, sending a messsage, or receiving one,
+ * this function will kill the program
+ * @param msg error message displayed
+ */
+void MainWindow::serverError(const char *msg)
+{
+    perror(msg);
+    exit(1);
+}
+
+/**
+ * @brief MainWindow::sendMsg Sends a json object to the server.
+ * @param jsonMsg json to send to the server
+ */
+void MainWindow::sendMsg(json jsonMsg)
+{
+    std::string stringMsg = jsonMsg.dump();
+    memset(buffer,0,511);
+    strncpy(buffer, stringMsg.c_str(),511);
+    int n = write(sockfd,buffer,strlen(buffer));
+    if (n < 0){serverError("ERROR writing to socket");}
+}
+/**
+ * @brief MainWindow::receiveMsg Receives a message from the server. Clienmt waits until the message arrives
+ * @return stringBuffer String of message sent by the server
+ */
+std::string MainWindow::receiveMsg()
+{
+    memset(buffer, 0, 511);
+    int n = read(sockfd,buffer,511);
+    if (n < 0) serverError("ERROR reading from socket");
+    std::string stringBuffer(buffer);
+    return stringBuffer;
 }

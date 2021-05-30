@@ -6,13 +6,12 @@ using namespace tinyxml2;
 
 int main()
 {
-    /*
-    GeneticServer *geneticServer = new GeneticServer();
-    delete (geneticServer); //Para que Qt deje de llorar por memory leaks
-    */
-
-    GeneticAlgorithm geneticAlgorithm(10,16);
-    //geneticAlgorithm.removeOldXML();
-    geneticAlgorithm.executeAlgorithm(5000);
-
+    GeneticServer geneticServer = GeneticServer();
+    while(true){
+        geneticServer.readBuffer();
+        json jsonBuffer = geneticServer.getBuffer();
+        GeneticAlgorithm geneticAlgorithm(jsonBuffer["populationSize"],jsonBuffer["genepoolSize"]);
+        geneticAlgorithm.executeAlgorithm(jsonBuffer["maxIterations"]);
+        geneticServer.sendBuffer("Done");
+    }
 }

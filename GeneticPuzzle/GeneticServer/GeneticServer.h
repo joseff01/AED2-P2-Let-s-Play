@@ -1,7 +1,6 @@
 #ifndef GENETICSERVER_H
 #define GENETICSERVER_H
 
-
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +11,9 @@
 #include <netinet/in.h>
 #include <sstream>
 #include <iomanip>
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 class GeneticServer
 {
@@ -25,6 +27,9 @@ private:
 
 public:
     GeneticServer();
+    void readBuffer();
+    json getBuffer();
+    void sendBuffer(std::string Msg);
 };
 
 #endif // GENETICSERVER_H
