@@ -2,6 +2,7 @@
 #include "BPServer.h"
 #include "BacktrackingAlgorithm.h"
 #include "AStarAlgorithm.h"
+#include "../../LinkedList/List.h"
 
 int main()
 {
@@ -52,22 +53,24 @@ int main()
             case 0: { //A*
                 bpServer.readBuffer();
                 jsonMsg = bpServer.getBuffer();
-                std::vector<std::vector<int>> vector = jsonMsg["matrix"];
+                List<List<int>> list = jsonMsg["matrix"];
                 int matrix[7][11];
                 for (unsigned i = 0; (i < 7); i++) {
                     for (unsigned j = 0; (j < 11); j++) {
-                        matrix[i][j] = vector[i][j];
+                        matrix[i][j] = list[i][j];
                     }
                 }
                 AStarAlgorithm aStarAlgorithm = AStarAlgorithm();
                 int **resultMatrix = aStarAlgorithm.findPath(matrix);
-                std::vector<std::vector<int>> resultVector;
+                List<List<int>> resultList;
                 for (unsigned i = 0; (i < 7); i++) {
+                    List<int> resultColumn;
                     for (unsigned j = 0; (j < 11); j++) {
-                        resultVector[i][j] = resultMatrix[i][j];
+                        resultColumn.push_back(resultMatrix[i][j]);
                     }
+                    resultList.push_back(resultColumn);
                 }
-                jsonMsg["matrix"] = resultVector;
+                jsonMsg["matrix"] = resultList;
                 bpServer.sendBuffer(jsonMsg);
                 break;
             }
@@ -75,22 +78,24 @@ int main()
             case 1: { //Backtracking
                 bpServer.readBuffer();
                 jsonMsg = bpServer.getBuffer();
-                std::vector<std::vector<int>> vector = jsonMsg["matrix"];
+                List<List<int>> list = jsonMsg["matrix"];
                 int matrix[7][11];
                 for (unsigned i = 0; (i < 7); i++) {
                     for (unsigned j = 0; (j < 11); j++) {
-                        matrix[i][j] = vector[i][j];
+                        matrix[i][j] = list[i][j];
                     }
                 }
                 BacktrackingAlgorithm backtrackingAlgorithm = BacktrackingAlgorithm();
                 int **resultMatrix = backtrackingAlgorithm.findPath(matrix);
-                std::vector<std::vector<int>> resultVector;
+                List<List<int>> resultList;
                 for (unsigned i = 0; (i < 7); i++) {
+                    List<int> resultColumn;
                     for (unsigned j = 0; (j < 11); j++) {
-                        resultVector[i][j] = resultMatrix[i][j];
+                        resultColumn.push_back(resultMatrix[i][j]);
                     }
+                    resultList.push_back(resultColumn);
                 }
-                jsonMsg["matrix"] = resultVector;
+                jsonMsg["matrix"] = resultList;
                 bpServer.sendBuffer(jsonMsg);
                 break;
                 }
