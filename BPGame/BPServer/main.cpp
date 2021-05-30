@@ -2,6 +2,7 @@
 #include "BPServer.h"
 #include "BacktrackingAlgorithm.h"
 #include "AStarAlgorithm.h"
+#include "list.h"
 
 int main()
 {
@@ -43,6 +44,62 @@ int main()
         std::cout << std::endl;
     }
     std::cout << std::endl;*/
-    BPServer *geneticServer = new BPServer();
-    return 0;
+    BPServer bpServer = BPServer();
+
+    while(true) {
+        bpServer.readBuffer();
+        json jsonMsg = bpServer.getBuffer();
+        switch ((int)jsonMsg["algorithm"]) {
+            case 0: { //A*
+                bpServer.readBuffer();
+                jsonMsg = bpServer.getBuffer();
+                std::vector<std::vector<int>> vector = jsonMsg["matrix"];
+                int matrix[7][11];
+                for (unsigned i = 0; (i < 7); i++) {
+                    for (unsigned j = 0; (j < 11); j++) {
+                        matrix[i][j] = vector[i][j];
+                    }
+                }
+                AStarAlgorithm aStarAlgorithm = AStarAlgorithm();
+                int **resultMatrix = aStarAlgorithm.findPath(matrix);
+                std::vector<std::vector<int>> resultVector;
+                for (unsigned i = 0; (i < 7); i++) {
+                    for (unsigned j = 0; (j < 11); j++) {
+                        resultVector[i][j] = resultMatrix[i][j];
+                    }
+                }
+                jsonMsg["matrix"] = resultVector;
+                bpServer.sendBuffer(jsonMsg);
+                break;
+            }
+
+            case 1: { //Backtracking
+                bpServer.readBuffer();
+                jsonMsg = bpServer.getBuffer();
+                std::vector<std::vector<int>> vector = jsonMsg["matrix"];
+                int matrix[7][11];
+                for (unsigned i = 0; (i < 7); i++) {
+                    for (unsigned j = 0; (j < 11); j++) {
+                        matrix[i][j] = vector[i][j];
+                    }
+                }
+                BacktrackingAlgorithm backtrackingAlgorithm = BacktrackingAlgorithm();
+                int **resultMatrix = backtrackingAlgorithm.findPath(matrix);
+                std::vector<std::vector<int>> resultVector;
+                for (unsigned i = 0; (i < 7); i++) {
+                    for (unsigned j = 0; (j < 11); j++) {
+                        resultVector[i][j] = resultMatrix[i][j];
+                    }
+                }
+                jsonMsg["matrix"] = resultVector;
+                bpServer.sendBuffer(jsonMsg);
+                break;
+                }
+
+            case 3: { //stop Server
+                bpServer.endServer();
+                return(0);
+            }
+        }
+    }
 }
