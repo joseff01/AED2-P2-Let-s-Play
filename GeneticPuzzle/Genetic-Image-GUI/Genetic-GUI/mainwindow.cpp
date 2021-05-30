@@ -4,6 +4,8 @@
 
 #include <QDir>
 
+
+
 //For testing out frankenImg function, can be removed later
 #include <stdlib.h> /* srand, rand */
 #include <time.h>   /* time */
@@ -151,4 +153,39 @@ std::string MainWindow::receiveMsg()
     if (n < 0) serverError("ERROR reading from socket");
     std::string stringBuffer(buffer);
     return stringBuffer;
+}
+
+List<int> MainWindow::getGenerationList(int generation)
+{
+    std::string XMLStr = "../GenerationXML/XMLGeneration";
+    std::string generationCounterStr = std::to_string(generation);
+    XMLStr.append(generationCounterStr);
+    XMLStr.append(".xml");
+    XMLDocument XMLDoc;
+    XMLDoc.LoadFile(XMLStr.c_str());
+    XMLNode *pRoot = XMLDoc.FirstChild();
+    int mostFitness = 0;
+    int mostFintessPos;
+    int counter = 0;
+    List<List<int>> listOfIndividuals;
+    XMLElement *pList = pRoot->FirstChildElement("Individual0");
+    for(pList; pList != NULL; pList = pList->NextSiblingElement()){
+        XMLElement *pListElement = pList->FirstChildElement();
+        int fitness;
+        pListElement->QueryIntText(&fitness);
+        if (fitness >= mostFitness){
+            mostFitness = fitness;
+            mostFintessPos = counter;
+        }
+        List<int> listGenes;
+        pListElement = pListElement->NextSiblingElement();
+        for (pListElement; pListElement != NULL; pListElement = pListElement->NextSiblingElement()){
+            int gene;
+            pListElement->QueryIntText(&gene);
+            listGenes.push_back(gene);
+        }
+        listOfIndividuals.push_back(listGenes);
+        counter++;
+    }
+    return listOfIndividuals[mostFintessPos];
 }

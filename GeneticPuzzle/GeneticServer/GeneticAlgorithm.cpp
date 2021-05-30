@@ -226,8 +226,6 @@ void GeneticAlgorithm::generateGenerationXML()
     // Adding the standard Root Node to the xml document
     XMLNode *pRoot = xmlDoc.NewElement("Root");
     xmlDoc.InsertFirstChild(pRoot);
-    // Creation of the element that will contain the list of genes and the fitness of each individual
-    XMLElement *pElement = xmlDoc.NewElement("Generation");
     // Getting the list of individuals
     List<GeneticIndividual> generationList = geneticPopulation.getIndividualsList();
     // Loop to get each individual into the xml document
@@ -282,5 +280,8 @@ void GeneticAlgorithm::removeOldXML()
         path.remove(dirfile);
     }
 }
+
+
+
 
 

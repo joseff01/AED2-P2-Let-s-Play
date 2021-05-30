@@ -12,11 +12,14 @@
 #include <netdb.h>
 #include <iostream>
 #include "json.hpp"
+#include "List.h"
+#include "tinyxml2.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 using json = nlohmann::json;
+using namespace tinyxml2;
 
 class MainWindow : public QMainWindow
 {
@@ -41,5 +44,6 @@ private:
     void serverError(const char *msg);
     void sendMsg(json message);
     std::string receiveMsg();
+    List<int> getGenerationList(int generation);
 };
 #endif // MAINWINDOW_H
