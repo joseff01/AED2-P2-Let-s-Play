@@ -707,7 +707,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Select number of players
+  m_text: Select number of frogs
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ac6c1a4a60b9ffc469087653045de329, type: 2}
   m_sharedMaterial: {fileID: -6787642779361791819, guid: ac6c1a4a60b9ffc469087653045de329, type: 2}
