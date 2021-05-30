@@ -2,7 +2,6 @@
 #include "BPServer.h"
 #include "BacktrackingAlgorithm.h"
 #include "AStarAlgorithm.h"
-#include "list.h"
 
 int main()
 {

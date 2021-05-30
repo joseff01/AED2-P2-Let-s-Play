@@ -1,7 +1,7 @@
 #ifndef ASTAR_ALGORITHM_H
 #define ASTAR_ALGORITHM_H
 
-#include "List.h"
+#include "../../LinkedList/List.h"
 #include "MapConstants.h"
 
 //! Class in charge of carrying out the A* Pathfinding algorithm
