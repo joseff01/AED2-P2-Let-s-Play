@@ -66,7 +66,7 @@ public class SingletonGrids{
         int counter = 0;
         for (int y = 0; y < matrix.GetLength(1); y += 1)
         {
-            for (int x = 0; y < matrix.GetLength(0); x += 1)
+            for (int x = 0; x < matrix.GetLength(0); x += 1)
             {
                 matrix[x, y] = (int)globalGrid[counter].z;
                 counter++;

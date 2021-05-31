@@ -15,7 +15,6 @@ public class GridScript : MonoBehaviour
     void Start()
     {
         grid = new Vector3[height * width];
-        Debug.Log(grid.Length);
 
         Vector2 startingPos = gameObject.transform.position;
 
