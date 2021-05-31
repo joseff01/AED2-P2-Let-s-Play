@@ -45,24 +45,27 @@ public class SingletonGrids{
     }
     public void  ballPos(Vector3 pos)
     {
+        bool flag = true;
         foreach (Vector3 gridPos in globalGrid)
         {
             int index = Array.IndexOf(globalGrid, gridPos);
 
-            if ((gridPos - pos).sqrMagnitude < 1)
+            if(flag && ((gridPos - pos).sqrMagnitude < 1))
             {
                 globalGrid[index].z = 3;
+                flag = false;
             }
             else if (gridPos.z ==3)
             {
                 globalGrid[index].z = 0;
+                
             }
         }
         createMatrix();
     }
     void createMatrix()
     {
-        int[,] matrix = new int[11,7];
+        int[,] matrix = new int[11, 7];
         int counter = 0;
         for (int y = 0; y < matrix.GetLength(1); y += 1)
         {
@@ -72,7 +75,26 @@ public class SingletonGrids{
                 counter++;
             }
         }
+        PrintMatrix(matrix);
+        SendMatrixJson.serializeMatrix(matrix);
+    }
 
+
+    void PrintMatrix(int[,] matrix)
+    {
+        int rowLength = matrix.GetLength(0);
+        int colLength = matrix.GetLength(1);
+        string arrayString = "";
+        for (int j = 0; j < colLength; j++)
+        {
+            for (int i = 0; i < rowLength; i++)
+            {
+                arrayString += string.Format("{0} ", matrix[i, j]);
+            }
+            arrayString += System.Environment.NewLine + System.Environment.NewLine;
+        }
+
+        Debug.Log(arrayString);
     }
 }
         

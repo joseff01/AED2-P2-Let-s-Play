@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class SendMatrixJson
 {
-    public void serializeMatrix()
+    public static void serializeMatrix(int[,] matrix)
     {
-        Debug.Log("matrix");
-        //string json = JsonConvert.SerializeObject(famousCouples, Formatting.Indented);
-
-
+        string json = JsonConvert.SerializeObject(matrix, Formatting.Indented);
     }
 
 }
