@@ -16,7 +16,10 @@
 #include "tinyxml2.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui
+{
+    class MainWindow;
+}
 QT_END_NAMESPACE
 using json = nlohmann::json;
 using namespace tinyxml2;
@@ -26,7 +29,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
@@ -34,6 +36,8 @@ private slots:
     void on_listWidget_itemClicked(QListWidgetItem *item);
 
     void on_horizontalSlider_sliderMoved(int position);
+
+    void on_pushButton_clicked();
 
 private:
     int sockfd;

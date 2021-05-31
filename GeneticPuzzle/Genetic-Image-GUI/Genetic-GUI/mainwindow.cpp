@@ -4,8 +4,6 @@
 
 #include <QDir>
 
-
-
 //For testing out frankenImg function, can be removed later
 #include <stdlib.h> /* srand, rand */
 #include <time.h>   /* time */
@@ -40,7 +38,7 @@ MainWindow::~MainWindow() { delete ui; }
  */
 void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
 {
-    QImage image (item->text());
+    QImage image(item->text());
     imagePath = item->text();
     QPixmap pm = QPixmap::fromImage(image);
     ui->label->setPixmap(pm);
@@ -54,18 +52,24 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
  */
 void MainWindow::on_horizontalSlider_sliderMoved(int position)
 {
-    if(position>num){
+    if (position > num)
+    {
 
         bool ok;
-        QString temp = ui->lineEdit->text();                               //Gets the user's number input
+        QString temp = ui->lineEdit->text(); //Gets the user's number input
         int chunks = temp.toInt(&ok);
 
-        if(!ok){ std::cout << "please enter a number" << std::endl; }      //Checks if an int was introduced
+        if (!ok)
+        {
+            std::cout << "please enter a number" << std::endl;
+        } //Checks if an int was introduced
 
-        if(imagePath.back()!= 'g'){                                        //Checks if an image was introduced
+        if (imagePath.back() != 'g')
+        { //Checks if an image was introduced
             std::cout << "please enter a image" << std::endl;
         }
-        else{                                                              //Shows new generated Image
+        else
+        { //Shows new generated Image
             num++;
             QImage image(imagePath);
             GenerativeImg newImage(image, chunks);
@@ -90,7 +94,8 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
  * @brief MainWindow::clientSetup Funciton in charge of seting up the client side of the connection with the server.
  * Socket: 5000. Ip: localhost
  */
-void MainWindow::clientSetup(){
+void MainWindow::clientSetup()
+{
     int portno = 5000;
     int option = 1;
     struct sockaddr_in serv_addr;
@@ -98,23 +103,26 @@ void MainWindow::clientSetup(){
     struct hostent *server;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (setsockopt(sockfd,SOL_SOCKET,SO_REUSEPORT,&option,sizeof(int)) == -1) {
+    if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, &option, sizeof(int)) == -1)
+    {
         perror("setsockopt");
         exit(1);
     }
     if (sockfd < 0)
-      serverError("ERROR opening socket");
+        serverError("ERROR opening socket");
     server = gethostbyname(localHost);
-    if (server == NULL){
-      fprintf(stderr,"ERROR, no such host");
-      exit(0);
+    if (server == NULL)
+    {
+        fprintf(stderr, "ERROR, no such host");
+        exit(0);
     }
-    memset((char *) &serv_addr, 0, sizeof(serv_addr));
+    memset((char *)&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     memcpy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
     serv_addr.sin_port = htons(portno);
     std::cout << "Connecting to mserver..." << std::endl;
-    if (::connect(sockfd,(struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+    if (::connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    {
         serverError("ERROR connecting");
     }
 }
@@ -137,10 +145,13 @@ void MainWindow::serverError(const char *msg)
 void MainWindow::sendMsg(json jsonMsg)
 {
     std::string stringMsg = jsonMsg.dump();
-    memset(buffer,0,511);
-    strncpy(buffer, stringMsg.c_str(),511);
-    int n = write(sockfd,buffer,strlen(buffer));
-    if (n < 0){serverError("ERROR writing to socket");}
+    memset(buffer, 0, 511);
+    strncpy(buffer, stringMsg.c_str(), 511);
+    int n = write(sockfd, buffer, strlen(buffer));
+    if (n < 0)
+    {
+        serverError("ERROR writing to socket");
+    }
 }
 /**
  * @brief MainWindow::receiveMsg Receives a message from the server. Clienmt waits until the message arrives
@@ -149,8 +160,9 @@ void MainWindow::sendMsg(json jsonMsg)
 std::string MainWindow::receiveMsg()
 {
     memset(buffer, 0, 511);
-    int n = read(sockfd,buffer,511);
-    if (n < 0) serverError("ERROR reading from socket");
+    int n = read(sockfd, buffer, 511);
+    if (n < 0)
+        serverError("ERROR reading from socket");
     std::string stringBuffer(buffer);
     return stringBuffer;
 }
@@ -169,17 +181,20 @@ List<int> MainWindow::getGenerationList(int generation)
     int counter = 0;
     List<List<int>> listOfIndividuals;
     XMLElement *pList = pRoot->FirstChildElement("Individual0");
-    for(pList; pList != NULL; pList = pList->NextSiblingElement()){
+    for (pList; pList != NULL; pList = pList->NextSiblingElement())
+    {
         XMLElement *pListElement = pList->FirstChildElement();
         int fitness;
         pListElement->QueryIntText(&fitness);
-        if (fitness >= mostFitness){
+        if (fitness >= mostFitness)
+        {
             mostFitness = fitness;
             mostFintessPos = counter;
         }
         List<int> listGenes;
         pListElement = pListElement->NextSiblingElement();
-        for (pListElement; pListElement != NULL; pListElement = pListElement->NextSiblingElement()){
+        for (pListElement; pListElement != NULL; pListElement = pListElement->NextSiblingElement())
+        {
             int gene;
             pListElement->QueryIntText(&gene);
             listGenes.push_back(gene);
@@ -188,4 +203,29 @@ List<int> MainWindow::getGenerationList(int generation)
         counter++;
     }
     return listOfIndividuals[mostFintessPos];
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    json geneticInfo;
+
+    bool ok;
+    QString temp = ui->lineEdit->text(); //Gets the user's number input
+
+    // Get number of divs from bar (genepoolSize)
+    geneticInfo["genepoolSize"] = temp.toInt(&ok);
+
+    if (!ok)
+    {
+        std::cout << "You need to input an integer number of chunks!!";
+        return;
+    }
+
+    // Choose populationSize and max iterations
+    geneticInfo["populationSize"] = 10;
+    geneticInfo["maxIterations"] = 4000;
+
+    int simulatedGenerations = receiveMsg();
+
+    ui->horizontalSlider.setMaximum(simulatedGenerations);
 }

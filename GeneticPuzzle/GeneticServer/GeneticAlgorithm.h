@@ -53,7 +53,7 @@ private:
 
 public:
     GeneticAlgorithm(int PopulationSize, int GenepoolSize);
-    void executeAlgorithm(int maxIterations);
+    int executeAlgorithm(int maxIterations);
     void removeOldXML();
 };
 
