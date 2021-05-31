@@ -4,17 +4,42 @@ using UnityEngine;
 
 public class GridScript : MonoBehaviour
 {
-    public Vector3[] grid;
+    int height = 7;
+    int width = 11;
 
-    // Start is called before the first frame update
+    public Vector3[] grid;
+    public FrogSpawn frogSpawn;
+
+
+
     void Start()
     {
+        grid = new Vector3[height * width];
+        Debug.Log(grid.Length);
 
+        Vector2 startingPos = gameObject.transform.position;
+
+        float limX = startingPos.x + width;
+        float limY = startingPos.y - height;
+        int counter = 0;
+
+        for (float j = startingPos.y; j > limY; j--)
+        {
+            for (float i = startingPos.x; i <limX; i++)
+            {
+
+                grid[counter] = new Vector3(i, j,0);
+                counter++;
+                
+            }
+        }
+       SingletonGrids.Instance.setGlobalGrid(grid);
+        Invoke("triggerZValues", 0.2f);
+    }
+    void triggerZValues() {
+        SingletonGrids.Instance.asignZValues();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
 }
+    

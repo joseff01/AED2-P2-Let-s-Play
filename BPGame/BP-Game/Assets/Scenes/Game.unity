@@ -764,7 +764,6 @@ Transform:
   - {fileID: 1035865812}
   - {fileID: 273955318}
   - {fileID: 1832110285}
-  - {fileID: 652060356}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -929,36 +928,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ba94bea9b411b14ca95cac5cda523b6, type: 3}
---- !u!1 &652060355
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 652060356}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &652060356
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 652060355}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 519420032}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &741899446
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,18 +963,17 @@ MonoBehaviour:
   - {x: -4.5, y: 2.5, z: 0}
   - {x: -1.5, y: 2.5, z: 0}
   - {x: -2.5, y: 1.5, z: 0}
-  - {x: -5.5, y: 0.5, z: 0}
   - {x: -3.5, y: -0.5, z: 0}
-  - {x: -2.5, y: -2.4, z: 0}
-  - {x: -5.5, y: -2.4, z: 0}
+  - {x: -2.5, y: -2.5, z: 0}
+  - {x: -5.5, y: -2.5, z: 0}
   enemyplacements:
   - {x: 3.5, y: 2.5, z: 0}
   - {x: 1.5, y: 1.5, z: 0}
-  - {x: 4.5, y: 0.5, z: 0}
   - {x: 2.5, y: -0.5, z: 0}
   - {x: 0.5, y: -0.5, z: 0}
-  - {x: 2.5, y: -2.4, z: 0}
-  - {x: 4.5, y: -2.4, z: 0}
+  - {x: 2.5, y: -2.5, z: 0}
+  - {x: 4.5, y: -2.5, z: 0}
+  frogPlacements: []
 --- !u!4 &741899448
 Transform:
   m_ObjectHideFlags: 0
@@ -1435,6 +1403,51 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &1372435847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1372435849}
+  - component: {fileID: 1372435848}
+  m_Layer: 0
+  m_Name: GameGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1372435848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372435847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29444326051c01765ac40ba31b53cec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: []
+  frogSpawn: {fileID: 741899447}
+--- !u!4 &1372435849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372435847}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.5, y: 3.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1468658579
 GameObject:
   m_ObjectHideFlags: 0
