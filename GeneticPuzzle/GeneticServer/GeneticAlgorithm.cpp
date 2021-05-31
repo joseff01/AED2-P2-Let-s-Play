@@ -47,9 +47,9 @@ void GeneticAlgorithm::showGeneration()
     for (int i = 0; i < populationSize; i++)
     {
         List<int> geneList = geneticPopulation.getIndividualsList()[i].getGeneList();
-        std::cout << geneList << " ";
+        // std::cout << geneList << " ";
     }
-    std::cout << std::endl;
+    // std::cout << std::endl;
 }
 /**
  * @brief GeneticAlgorithm::geneticSelection Selection algorithm in charge of selecting the parents.
@@ -143,8 +143,8 @@ void GeneticAlgorithm::geneticCrossover()
         {
             geneListParent1.replace(j, geneListParent2[j]);
         }
-        std::cout << crossoverPoint << std::endl;
-        std::cout << geneListParent1 << std::endl;
+        // std::cout << crossoverPoint << std::endl;
+        // std::cout << geneListParent1 << std::endl;
         GeneticIndividual crossedChild1 = GeneticIndividual(genepoolSize);
         crossedChild1.setGeneList(geneListParent1);
         childrenList.push_back(crossedChild1);

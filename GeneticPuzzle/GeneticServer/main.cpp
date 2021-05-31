@@ -16,6 +16,7 @@ int main()
         // return number of generations
         json generationsJSON;
         generationsJSON["generations"] = generations;
+        std::cout << "Sending back amount of generations: " << generations << std::endl;
         geneticServer.sendBuffer(generationsJSON.dump());
     }
 }

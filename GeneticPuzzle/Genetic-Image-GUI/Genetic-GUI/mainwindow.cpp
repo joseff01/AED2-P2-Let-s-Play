@@ -1,15 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "../../Image/GenerativeImg.h"
 
 #include <QDir>
 
-//For testing out frankenImg function, can be removed later
-#include <stdlib.h> /* srand, rand */
-#include <time.h>   /* time */
-
 QString imagePath;
-int num = 0;
 
 /*!
  * \brief MainWindow::MainWindow Constructor of MainWindow's class, it will show the GUI of the project and will show the image paths available
@@ -25,12 +19,17 @@ MainWindow::MainWindow(QWidget *parent)
     {
         ui->listWidget->addItem(var.absoluteFilePath());
     }
+    ui->horizontalSlider->setMaximum(0);
 }
 
 /*!
  * \brief MainWindow::~MainWindow destructor of MainWindow's class
  */
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow()
+{
+    delete genImg;
+    delete ui;
+}
 
 /*!
  * \brief MainWindow::on_listWidget_itemClicked method that reacts to the user when clicked. It detects the chosen path from the widgetList
@@ -52,41 +51,15 @@ void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
  */
 void MainWindow::on_horizontalSlider_sliderMoved(int position)
 {
-    if (position > num)
-    {
+    if (this->ready)
+    { //Shows generated img of the generation
 
-        bool ok;
-        QString temp = ui->lineEdit->text(); //Gets the user's number input
-        int chunks = temp.toInt(&ok);
+        List<int> orderList = getGenerationList(position);
 
-        if (!ok)
-        {
-            std::cout << "please enter a number" << std::endl;
-        } //Checks if an int was introduced
-
-        if (imagePath.back() != 'g')
-        { //Checks if an image was introduced
-            std::cout << "please enter a image" << std::endl;
-        }
-        else
-        { //Shows new generated Image
-            num++;
-            QImage image(imagePath);
-            GenerativeImg newImage(image, chunks);
-
-            List<int> l;
-
-            srand(time(NULL));
-            for (int i = 0; i < chunks; i++)
-            {
-                l.push_back(rand() % chunks);
-            }
-
-            QPixmap pm = QPixmap::fromImage(newImage.getFrankenImg(l));
-            ui->label->setPixmap(pm);
-            ui->label->adjustSize();                  // Modifies the label's size to the given image
-            ui->label->setAlignment(Qt::AlignCenter); // Aligns label in the midle of the widget
-        }
+        QPixmap pm = QPixmap::fromImage(this->genImg->getFrankenImg(orderList));
+        ui->label->setPixmap(pm);
+        ui->label->adjustSize();                  // Modifies the label's size to the given image
+        ui->label->setAlignment(Qt::AlignCenter); // Aligns label in the midle of the widget
     }
 }
 
@@ -213,19 +186,48 @@ void MainWindow::on_pushButton_clicked()
     QString temp = ui->lineEdit->text(); //Gets the user's number input
 
     // Get number of divs from bar (genepoolSize)
-    geneticInfo["genepoolSize"] = temp.toInt(&ok);
+    int chunks = temp.toInt(&ok);
 
     if (!ok)
     {
-        std::cout << "You need to input an integer number of chunks!!";
+        std::cout << "please enter a number" << std::endl;
+        return;
+    } //Checks if an int was introduced
+
+    if (imagePath.back() != 'g')
+    { //Checks if an image was introduced
+        std::cout << "please enter a image" << std::endl;
         return;
     }
 
+    if (chunks <= 2 || (!GenerativeImg::isSquare(chunks) && !GenerativeImg::isPowerOf2(chunks)))
+    {
+        std::cout << "please enter a square number or a power of 2 (greater than 2)" << std::endl;
+        return;
+    }
+    std::cout << "all good" << std::endl;
+
+    // Create GenerativeImg
+    QImage image(imagePath);
+
+    this->genImg = new GenerativeImg(image, chunks);
+
     // Choose populationSize and max iterations
+    geneticInfo["genepoolSize"] = chunks;
     geneticInfo["populationSize"] = 10;
     geneticInfo["maxIterations"] = 4000;
 
-    int simulatedGenerations = receiveMsg();
+    std::cout << "Sending message: " << geneticInfo << std::endl;
 
-    ui->horizontalSlider.setMaximum(simulatedGenerations);
+    sendMsg(geneticInfo);
+
+    json generationsInfo = json::parse(receiveMsg());
+
+    std::cout << "Received message: " << generationsInfo << std::endl;
+
+    int simulatedGenerations = generationsInfo["generations"].get<int>();
+
+    ui->horizontalSlider->setMaximum(simulatedGenerations);
+
+    this->ready = true;
 }

@@ -14,6 +14,7 @@
 #include "json.hpp"
 #include "List.h"
 #include "tinyxml2.h"
+#include "../../Image/GenerativeImg.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -42,6 +43,9 @@ private slots:
 private:
     int sockfd;
     char buffer[511];
+
+    GenerativeImg *genImg = nullptr;
+    bool ready = false;
 
     Ui::MainWindow *ui;
     void clientSetup();
