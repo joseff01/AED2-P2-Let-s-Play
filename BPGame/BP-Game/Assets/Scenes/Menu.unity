@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 98866894}
   - component: {fileID: 98866896}
   - component: {fileID: 98866895}
+  - component: {fileID: 98866897}
   m_Layer: 5
   m_Name: TextPlay
   m_TagString: Untagged
@@ -390,6 +391,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 98866893}
   m_CullTransparentMesh: 1
+--- !u!114 &98866897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98866893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaeb3aff6995c194db6e684a5e2ff421, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &228657091
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,10 +553,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 253533109}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1389169cf689834790a8669ab0e6558, type: 3}
+  m_Script: {fileID: 11500000, guid: aaeb3aff6995c194db6e684a5e2ff421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yourButton: {fileID: 253533112}
 --- !u!114 &253533112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,14 +600,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 253533109}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 253533111}
+        m_TargetAssemblyTypeName: ChangeInt, Assembly-CSharp
+        m_MethodName: changeSingleInt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -695,7 +707,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Select number of players
+  m_text: Select number of frogs
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ac6c1a4a60b9ffc469087653045de329, type: 2}
   m_sharedMaterial: {fileID: -6787642779361791819, guid: ac6c1a4a60b9ffc469087653045de329, type: 2}
@@ -821,10 +833,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 543278323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1389169cf689834790a8669ab0e6558, type: 3}
+  m_Script: {fileID: 11500000, guid: aaeb3aff6995c194db6e684a5e2ff421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yourButton: {fileID: 543278326}
 --- !u!114 &543278326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -869,14 +880,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 543278323}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 543278325}
+        m_TargetAssemblyTypeName: ChangeInt, Assembly-CSharp
+        m_MethodName: changeSingleInt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1782,10 +1793,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1796607073}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1389169cf689834790a8669ab0e6558, type: 3}
+  m_Script: {fileID: 11500000, guid: aaeb3aff6995c194db6e684a5e2ff421, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yourButton: {fileID: 1796607076}
 --- !u!114 &1796607076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1830,14 +1840,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1796607073}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1796607075}
+        m_TargetAssemblyTypeName: ChangeInt, Assembly-CSharp
+        m_MethodName: changeSingleInt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

@@ -1,16 +1,19 @@
 #include "GenerativeImg.h"
 #include <stdexcept>
 #include <math.h>
+#include <QPainter>
 
 /*!
  * \brief Construct a new Generative Img object by giving it an image and the number of chunks you wish it to be split by
  * 
  * \param img the image you wish to utilize as a QImage
  * \param n number of chunks you wish the image to split in, MUST BE a square number or any power of 2 (greater than 0) 
+ * \throws invalid_argument if number of chunks to be segmentated into is less than or equal to 2, or if it's neither a square nor a power of 2
  */
 GenerativeImg::GenerativeImg(QImage img, int n)
 {
     this->chunks = List<QImage>(); // initialize empty linked list
+    this->originalImg = img.copy();
 
     if (n <= 2)
     {
@@ -22,7 +25,7 @@ GenerativeImg::GenerativeImg(QImage img, int n)
         throw std::invalid_argument("Number of chunks is neither a perfect square nor a power of 2 (for a power greater than 1)");
     }
 
-    segmentate(n);
+    segmentate(img, n);
 }
 
 //! Destroy the Generative Img:: Generative Img object
@@ -36,10 +39,8 @@ GenerativeImg::~GenerativeImg()
  * 
  * \param n number of chunks you wish the image to split in, MUST BE a square number or any power of 2 (greater than 0)
  */
-void GenerativeImg::segmentate(int n)
+void GenerativeImg::segmentate(QImage img, int n)
 {
-    QImage img = this->originalImg;
-
     int rows = img.height();
     int columns = img.width();
 
@@ -61,19 +62,22 @@ void GenerativeImg::segmentate(int n)
         throw std::invalid_argument("Number of chunks is neither a perfect square nor a power of 2 (for a power greater than 1)");
     }
 
+    if (blockSizeR < 1 || blockSizeC < 1)
+    {
+        throw std::invalid_argument("Number of chunks is too high (pixels would need to be split)");
+    }
+
     // ---------Actual segmentation happens beyond this point------------
 
     QRect chunkWindow = QRect(0, 0, blockSizeC, blockSizeR); // rect representing the size of a chunk used to extract all the chunks from original image
 
-    int i = 0;
     for (int rowChunk = 0; rowChunk < rows / blockSizeR; rowChunk++)
     {
-        chunkWindow.setY(rowChunk * blockSizeR);
+        chunkWindow.moveTop(rowChunk * blockSizeR);
         for (int columnChunk = 0; columnChunk < columns / blockSizeC; columnChunk++)
         {
-            chunkWindow.setX(columnChunk * blockSizeC);
+            chunkWindow.moveLeft(columnChunk * blockSizeC);
             this->chunks.push_back(img.copy(chunkWindow));
-            i++;
         }
     }
 }
@@ -144,4 +148,55 @@ QImage GenerativeImg::getOriginalImg()
 size_t GenerativeImg::getNumOfChunks()
 {
     return this->chunks.length();
+}
+
+/*!
+ * \brief Call this method by giving it an orderList which denotes the order in which you wish to add chunks to your new combined image. The orderList must be the same size as the amount of chunks in which the image was originally segmentated.
+ * 
+ * \param orderList List of ints that must be the same size as the amount of chunks the original image was segmentated in. It denotes the order to use for the chunks to build a new combined image.
+ * \return QImage get the combined image of the chunks denoted in the orderList
+ * \throws invalid_argument if orderList is not the appropiate length or has elements that would be out of range
+ */
+QImage GenerativeImg::getFrankenImg(List<int> orderList)
+{
+    if (orderList.length() != this->chunks.length())
+    {
+        throw std::invalid_argument("Error called from getFrankenImg(): Size of list denoting the order of chunks must have a length equal to the number of chunks the original image was segmentated into.");
+    }
+
+    int blockSizeR = this->chunks[0].height();
+    int blockSizeC = this->chunks[0].width();
+
+    int rows;
+    int columns;
+
+    if (isSquare(this->chunks.length()))
+    {
+        rows = blockSizeR * sqrt(this->chunks.length());
+        columns = blockSizeC * sqrt(this->chunks.length());
+    }
+    else
+    {
+        rows = blockSizeR * sqrt(this->chunks.length() / 2);
+        columns = blockSizeC * sqrt(this->chunks.length() * 2);
+    }
+
+    QImage frankenstein(columns, rows, originalImg.format());
+    frankenstein.fill(0);
+    QPainter painter(&frankenstein);
+
+    int i = 0;
+    for (int rowChunk = 0; rowChunk < rows / blockSizeR; rowChunk++)
+    {
+        for (int columnChunk = 0; columnChunk < columns / blockSizeC; columnChunk++)
+        {
+            if (orderList[i] < 0 || orderList[i] >= this->chunks.length())
+            {
+                throw std::invalid_argument("Error called from getFrankenImg(): passed orderList may not have any element >= the amount of chunks the image was split in. Nor may it have any negative elements.");
+            }
+            painter.drawImage(columnChunk * blockSizeC, rowChunk * blockSizeR, this->chunks[orderList[i]]);
+            i++;
+        }
+    }
+    return frankenstein;
 }

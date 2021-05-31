@@ -1,5 +1,8 @@
 #ifndef BPSERVER_BPSERVER_H
 #define BPSERVER_BPSERVER_H
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 class BPServer{
 private:
@@ -12,6 +15,10 @@ private:
 
 public:
     BPServer();
+    void readBuffer();
+    json getBuffer();
+    void sendBuffer(json jsonMsg);
+    void endServer();
 };
 
 

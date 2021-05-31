@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
+        //SingletonInt.Instance.client.StartClient();
         SceneManager.LoadScene(1);
     }
 

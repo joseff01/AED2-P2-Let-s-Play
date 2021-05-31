@@ -1,14 +1,4 @@
 #include "GeneticServer.h"
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <sstream>
-#include <iomanip>
 
 using namespace std;
 
@@ -16,6 +6,32 @@ GeneticServer::GeneticServer()
 {
     serverSetup();
 }
+
+void GeneticServer::readBuffer()
+{
+    memset(buffer, 0, 511);
+    cout << "waiting for message..." << endl;
+    int n = read(newsockfd,buffer,511);
+    if (n < 0) error("ERROR reading from socket");
+    printf("Message received: %s\n",buffer);
+}
+
+json GeneticServer::getBuffer()
+{
+    json jsonBuffer = json::parse(buffer);
+    return jsonBuffer;
+}
+
+void GeneticServer::sendBuffer(std::string Msg)
+{
+    memset(buffer,0,511);
+    strncpy(buffer, Msg.c_str(),511);
+    int n = write(newsockfd,buffer,strlen(buffer));
+    if (n < 0){
+        error("ERROR writing to socket");
+    }
+}
+
 
 void GeneticServer::error(const char *msg)
 {
@@ -75,3 +91,4 @@ void GeneticServer::serverSetup()
 
     cout << "Connected to GeneticPuzzle client" << endl;
 }
+

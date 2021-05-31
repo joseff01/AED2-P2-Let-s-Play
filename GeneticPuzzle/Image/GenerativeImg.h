@@ -9,26 +9,29 @@ class GenerativeImg
 private:
     /* data */
 
-    void segmentate(int n);
+    void segmentate(QImage img, int n);
 
     //! The base image that's worked from
     QImage originalImg;
 
+public:
+    static bool isSquare(int n);
+
+    static bool isPowerOf2(int n);
+
     //! Pointer to array holding the chunks of the image
     List<QImage> chunks;
-
-    bool isSquare(int n);
-
-    bool isPowerOf2(int n);
-
-public:
     GenerativeImg(QImage img, int n);
 
-    QImage *getChunks();
+    ~GenerativeImg();
+
+    // QImage *getChunks();
 
     QImage getOriginalImg();
 
     size_t getNumOfChunks();
+
+    QImage getFrankenImg(List<int> orderList);
 };
 
 #endif
