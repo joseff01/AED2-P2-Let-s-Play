@@ -46,6 +46,7 @@ private:
 
     GenerativeImg *genImg = nullptr;
     bool ready = false;
+    int chunks;
 
     Ui::MainWindow *ui;
     void clientSetup();

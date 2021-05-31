@@ -142,13 +142,28 @@ std::string MainWindow::receiveMsg()
 
 List<int> MainWindow::getGenerationList(int generation)
 {
-    std::string XMLStr = "../GenerationXML/XMLGeneration";
+    std::string XMLStr = "../../GeneticServer/GenerationXML/XMLGeneration";
     std::string generationCounterStr = std::to_string(generation);
     XMLStr.append(generationCounterStr);
     XMLStr.append(".xml");
+
     XMLDocument XMLDoc;
-    XMLDoc.LoadFile(XMLStr.c_str());
+    XMLError err = XMLDoc.LoadFile(XMLStr.c_str());
+    if (err != XML_SUCCESS)
+    {
+        std::cout << "Error loading file: " << (int)err << std::endl;
+        std::cout << "Error loading file: " << XMLDoc.ErrorName() << std::endl;
+        List<int> nullList;
+        for (int i = 0; i < this->chunks; i++)
+        {
+            nullList.push_back(0);
+        }
+
+        return nullList;
+    }
+
     XMLNode *pRoot = XMLDoc.FirstChild();
+
     int mostFitness = 0;
     int mostFintessPos;
     int counter = 0;
@@ -186,7 +201,7 @@ void MainWindow::on_pushButton_clicked()
     QString temp = ui->lineEdit->text(); //Gets the user's number input
 
     // Get number of divs from bar (genepoolSize)
-    int chunks = temp.toInt(&ok);
+    this->chunks = temp.toInt(&ok);
 
     if (!ok)
     {
