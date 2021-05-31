@@ -19,6 +19,7 @@ public class BallClick : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         startingPos = gameObject.transform.position;
+        Invoke("ResetPos", 0.5f); 
     }
 
     private void OnMouseDown()              //Detecta Click del mouse    
@@ -63,14 +64,15 @@ public class BallClick : MonoBehaviour
         yield return new WaitForSeconds(1);
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
-        //GetMatrix.sendMessage();
+        SingletonGrids.Instance.ballPos(transform.position);
     }
 
-    public void ResetPos()
+    public void ResetPos()  // al colisionar con la cancha se resetea la posicion
     {
         gameObject.transform.position = startingPos;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
+        SingletonGrids.Instance.ballPos(transform.position);
     }
 
 }

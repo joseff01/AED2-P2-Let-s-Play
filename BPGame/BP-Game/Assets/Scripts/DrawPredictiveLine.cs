@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class DrawPredictiveLine : MonoBehaviour
 {
     Vector3 firstPoint;
@@ -16,8 +17,8 @@ public class DrawPredictiveLine : MonoBehaviour
 
     void DrawLine(int[,] mapMatrix)
     {
-        int gridWidth = 7;
-        int gridHeight = 11;
+        int gridWidth = 11;
+        int gridHeight = 7;
         int tileWidth = 1;
         int tileHeight = 1;
 
@@ -44,9 +45,10 @@ public class DrawPredictiveLine : MonoBehaviour
                     }
                 }
             }
+
             if (foundFirst && foundSecond)
             {
-                Debug.DrawLine(firstPoint, secondPoint, Color.red, 5);
+                Gizmos.DrawLine(firstPoint, secondPoint);
                 counter++;
                 foundFirst = false;
                 foundSecond = false;

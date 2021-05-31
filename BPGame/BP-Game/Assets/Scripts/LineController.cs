@@ -6,7 +6,7 @@ public class LineController : MonoBehaviour
 {
     private LineRenderer lr;
     private Transform[] points;
-    private bool isInaveled = false;
+    private bool isEnabled = false;
 
     private void Awake()
     {
@@ -19,12 +19,12 @@ public class LineController : MonoBehaviour
     }
     public void setVIsible(bool active) {
         lr.enabled = active;
-        isInaveled = active;
+        isEnabled = active;
 
     }
     private void Update()
     {
-        if (isInaveled)
+        if (isEnabled)
         {
             for (int i = 0; i < points.Length; i++)
             {
