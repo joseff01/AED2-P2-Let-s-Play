@@ -4,31 +4,27 @@ using UnityEngine;
 
 public class DrawPredictiveLine : MonoBehaviour
 {
+    Vector3 firstPoint;
+    Vector3 secondPoint;
+
     // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     void DrawLine(int[,] mapMatrix)
     {
-        gridWidth = 7;
-        gridHeight = 11;
-        tileWidth = 1;
-        tileHeight = 1;
+        int gridWidth = 7;
+        int gridHeight = 11;
+        int tileWidth = 1;
+        int tileHeight = 1;
 
         int counter = 1;
         bool drawing = true;
         bool foundFirst = false;
         bool foundSecond = false;
-        Vector3 firstPoint;
-        Vector3 secondPoint;
 
         while (drawing)
         {
@@ -36,14 +32,14 @@ public class DrawPredictiveLine : MonoBehaviour
             {
                 for (int j = 0; j < 11; j++)
                 {
-                    if (mapMatrix[i][j] == counter)
+                    if (mapMatrix[i,j] == counter)
                     {
-                        Vector3 firstPoint = new Vector3(j * gridWidth / 7 + tileWidth / 2, i * gridHeight / 11 + tileHeight / 2, 0);
+                        firstPoint = new Vector3(j * gridWidth / 7 + tileWidth / 2, i * gridHeight / 11 + tileHeight / 2, 0);
                         foundFirst = true;
                     }
-                    if (mapMatrix[i][j] == counter + 1)
+                    if (mapMatrix[i,j] == counter + 1)
                     {
-                        Vector3 secondPoint = new Vector3(j * gridWidth / 7 + tileWidth / 2, i * gridHeight / 11 + tileHeight / 2, 0);
+                        secondPoint = new Vector3(j * gridWidth / 7 + tileWidth / 2, i * gridHeight / 11 + tileHeight / 2, 0);
                         foundSecond = true;
                     }
                 }

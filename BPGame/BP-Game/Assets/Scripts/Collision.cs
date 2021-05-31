@@ -11,16 +11,16 @@ public class Collision : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("hello");
         i++;
         if (isRight)
         {
             SingletonInt.Instance.setRight(i);
-            TMPtext.SetText(SingletonInt.Instance.left.ToString() + "/" + i.ToString());
+            TMPtext.SetText(i.ToString() + "/" + SingletonInt.Instance.left.ToString());
         }
         else {
             SingletonInt.Instance.setLeft(i);
-            TMPtext.SetText( i.ToString() + "/" + SingletonInt.Instance.right.ToString());
+            TMPtext.SetText( SingletonInt.Instance.right.ToString() + "/" + i.ToString());
         }
+        col.gameObject.GetComponent<BallClick>().ResetPos();
     }
 }
