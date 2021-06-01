@@ -43,10 +43,6 @@ public class BPClient
         Debug.Log("Enviando mensaje: ");
         Debug.Log(receivedString);
         byte[] msg = Encoding.ASCII.GetBytes(receivedString);
-        foreach (byte mik in msg)
-        {
-            Debug.Log(mik);
-        }
         client.Send(msg);
     }
     /**
