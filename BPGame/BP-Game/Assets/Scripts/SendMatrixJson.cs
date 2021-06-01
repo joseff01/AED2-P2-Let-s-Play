@@ -4,8 +4,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class SendMatrixJson
-
+public class SendMatrixJson 
 {
     public static void serializeMatrix(int[,] matrix)
     {
@@ -18,9 +17,11 @@ public class SendMatrixJson
         int[,] product = jObj["matrix"].ToObject<int[,]>();
         Debug.Log("Se recibió respuesta");
         Debug.Log(product);
-        DrawPredictiveLine.DrawLine(product);
+        DrawPredictiveLine temp = new DrawPredictiveLine();
+        temp.draw(product);
 
     }
+
 
 
 }

@@ -78,7 +78,7 @@ public class SingletonGrids{
                 counter++;
             }
         }
-        PrintMatrix(matrix);
+        //PrintMatrix(matrix);
         SendMatrixJson.serializeMatrix(matrix);
     }
 
