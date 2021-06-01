@@ -46,64 +46,79 @@ int main()
     std::cout << std::endl;*/
     BPServer bpServer = BPServer();
 
-    while(true) {
+    while (true)
+    {
         bpServer.readBuffer();
         json jsonMsg = bpServer.getBuffer();
-        switch ((int)jsonMsg["algorithm"]) {
-            case 0: { //A*
-                bpServer.readBuffer();
-                jsonMsg = bpServer.getBuffer();
-                List<List<int>> list = jsonMsg["matrix"];
-                int matrix[7][11];
-                for (unsigned i = 0; (i < 7); i++) {
-                    for (unsigned j = 0; (j < 11); j++) {
-                        matrix[i][j] = list[i][j];
-                    }
-                }
-                AStarAlgorithm aStarAlgorithm = AStarAlgorithm();
-                int **resultMatrix = aStarAlgorithm.findPath(matrix);
-                List<List<int>> resultList;
-                for (unsigned i = 0; (i < 7); i++) {
-                    List<int> resultColumn;
-                    for (unsigned j = 0; (j < 11); j++) {
-                        resultColumn.push_back(resultMatrix[i][j]);
-                    }
-                    resultList.push_back(resultColumn);
-                }
-                jsonMsg["matrix"] = resultList;
-                bpServer.sendBuffer(jsonMsg);
-                break;
-            }
+        switch ((int)jsonMsg["algorithm"])
+        {
+        case 0:
+        { //A*
+            bpServer.readBuffer();
+            jsonMsg = bpServer.getBuffer();
+            List<List<int>> badList = jsonMsg["matrix"];
 
-            case 1: { //Backtracking
-                bpServer.readBuffer();
-                jsonMsg = bpServer.getBuffer();
-                List<List<int>> list = jsonMsg["matrix"];
-                int matrix[7][11];
-                for (unsigned i = 0; (i < 7); i++) {
-                    for (unsigned j = 0; (j < 11); j++) {
-                        matrix[i][j] = list[i][j];
-                    }
+            List<List<int>> list = bpServer.fixMatrix(badList);
+            int matrix[7][11];
+            for (unsigned i = 0; (i < 7); i++)
+            {
+                for (unsigned j = 0; (j < 11); j++)
+                {
+                    matrix[i][j] = list[i][j];
                 }
-                BacktrackingAlgorithm backtrackingAlgorithm = BacktrackingAlgorithm();
-                int **resultMatrix = backtrackingAlgorithm.findPath(matrix);
-                List<List<int>> resultList;
-                for (unsigned i = 0; (i < 7); i++) {
-                    List<int> resultColumn;
-                    for (unsigned j = 0; (j < 11); j++) {
-                        resultColumn.push_back(resultMatrix[i][j]);
-                    }
-                    resultList.push_back(resultColumn);
-                }
-                jsonMsg["matrix"] = resultList;
-                bpServer.sendBuffer(jsonMsg);
-                break;
-                }
-
-            case 3: { //stop Server
-                bpServer.endServer();
-                return(0);
             }
+            AStarAlgorithm aStarAlgorithm = AStarAlgorithm();
+            int **resultMatrix = aStarAlgorithm.findPath(matrix);
+            List<List<int>> resultList;
+            for (unsigned i = 0; (i < 7); i++)
+            {
+                List<int> resultColumn;
+                for (unsigned j = 0; (j < 11); j++)
+                {
+                    resultColumn.push_back(resultMatrix[i][j]);
+                }
+                resultList.push_back(resultColumn);
+            }
+            jsonMsg["matrix"] = resultList;
+            bpServer.sendBuffer(jsonMsg);
+            break;
+        }
+
+        case 1:
+        { //Backtracking
+            bpServer.readBuffer();
+            jsonMsg = bpServer.getBuffer();
+            List<List<int>> list = jsonMsg["matrix"];
+            int matrix[7][11];
+            for (unsigned i = 0; (i < 7); i++)
+            {
+                for (unsigned j = 0; (j < 11); j++)
+                {
+                    matrix[i][j] = list[i][j];
+                }
+            }
+            BacktrackingAlgorithm backtrackingAlgorithm = BacktrackingAlgorithm();
+            int **resultMatrix = backtrackingAlgorithm.findPath(matrix);
+            List<List<int>> resultList;
+            for (unsigned i = 0; (i < 7); i++)
+            {
+                List<int> resultColumn;
+                for (unsigned j = 0; (j < 11); j++)
+                {
+                    resultColumn.push_back(resultMatrix[i][j]);
+                }
+                resultList.push_back(resultColumn);
+            }
+            jsonMsg["matrix"] = resultList;
+            bpServer.sendBuffer(jsonMsg);
+            break;
+        }
+
+        case 3:
+        { //stop Server
+            bpServer.endServer();
+            return (0);
+        }
         }
     }
 }

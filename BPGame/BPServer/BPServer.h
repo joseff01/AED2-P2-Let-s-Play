@@ -1,6 +1,7 @@
 #ifndef BPSERVER_BPSERVER_H
 #define BPSERVER_BPSERVER_H
 #include "json.hpp"
+#include "../../LinkedList/List.h"
 
 using json = nlohmann::json;
 
@@ -20,6 +21,7 @@ public:
     json getBuffer();
     void sendBuffer(json jsonMsg);
     void endServer();
+    List<List<int>> fixMatrix(List<List<int>> badMatrix);
 };
 
 #endif //BPSERVER_BPSERVER_H

@@ -125,3 +125,20 @@ void BPServer::endServer()
     close(newsockfd);
     close(sockfd);
 }
+
+List<List<int>> BPServer::fixMatrix(List<List<int>> badMatrix)
+{
+    List<List<int>> goodMatrix;
+    for (int i = 0; i < 7; i++)
+    {
+        List<int> newRow;
+        for (int j = 0; j < 11; j++)
+        {
+            newRow.push_back(badMatrix[j][i]);
+        }
+        goodMatrix.push_back(newRow);
+        goodMatrix[i] = newRow; // must use '=' to create a deep copy
+    }
+    cout << "Bad Matrix: " << badMatrix << "\nGood Matrix: " << goodMatrix << endl;
+    return goodMatrix;
+}
