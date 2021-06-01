@@ -113,6 +113,7 @@ void BPServer::sendBuffer(json jsonMsg)
     string stringMsg = jsonMsg.dump();
     memset(buffer, 0, 2048);
     strncpy(buffer, stringMsg.c_str(), 2048);
+    cout << "Sending Message: " << buffer;
     int n = write(newsockfd, buffer, strlen(buffer));
     if (n < 0)
     {
