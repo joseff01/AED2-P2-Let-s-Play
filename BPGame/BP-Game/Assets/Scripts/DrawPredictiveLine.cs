@@ -5,17 +5,8 @@ using UnityEngine;
 
 public class DrawPredictiveLine : MonoBehaviour
 {
-    Vector3 firstPoint;
-    Vector3 secondPoint;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-
-    void DrawLine(int[,] mapMatrix)
+    public static void DrawLine(int[,] mapMatrix)
     {
         int gridWidth = 11;
         int gridHeight = 7;
@@ -29,6 +20,8 @@ public class DrawPredictiveLine : MonoBehaviour
 
         while (drawing)
         {
+            Vector3 firstPoint = new Vector3(123123,1231231,1231231);
+            Vector3 secondPoint = new Vector3(1312313, 1235345, 534536); ;
             for (int i = 0; i < 7; i++)
             {
                 for (int j = 0; j < 11; j++)
