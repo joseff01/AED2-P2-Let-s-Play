@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
+        DrawPredictiveLine.InstantiateLineRenderer();
         SingletonInt.Instance.client.StartClient();
         SceneManager.LoadScene(1);
     }

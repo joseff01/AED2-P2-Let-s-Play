@@ -227,7 +227,8 @@ void AStarAlgorithm::AStarPathfind()
         int nextNodeIndex = findMinOpenNode();
         if (nextNodeIndex == -1)
         {
-            throw std::invalid_argument("No possible path from ball to goal");
+            //throw std::invalid_argument("No possible path from ball to goal");
+            return;
         }
 
         int OpenListRemoveIndex = this->openList.find(nextNodeIndex);

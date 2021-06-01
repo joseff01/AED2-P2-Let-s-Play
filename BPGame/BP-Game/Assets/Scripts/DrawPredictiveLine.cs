@@ -6,6 +6,26 @@ using System.Linq;
 public class DrawPredictiveLine : MonoBehaviour
 {
 
+    private static LineRenderer lineRenderer = new GameObject("Line").AddComponent<LineRenderer>();
+
+    public static void InstantiateLineRenderer()
+    {
+        //For creating line renderer object
+        lineRenderer.startColor = Color.red;
+        lineRenderer.endColor = Color.red;
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+        lineRenderer.useWorldSpace = true;
+
+        DontDestroyOnLoad(lineRenderer);
+
+        Debug.Log("lineRenderer instantiated!!");
+
+        // lineRenderer.material = GetComponent<Renderer>().material;
+        // lineRenderer.sortingLayerName = "Foreground";
+        // mis intentos de asignar un material y sorting layer xd
+    }
+
     public static void DrawLine(int[,] mapMatrix)
     {
         int gridWidth = 11;
@@ -17,19 +37,7 @@ public class DrawPredictiveLine : MonoBehaviour
         bool drawing = true;
         bool foundNext = false;
 
-        //For creating line renderer object
-        LineRenderer lineRenderer = new GameObject("Line").AddComponent<LineRenderer>();
-        lineRenderer.startColor = Color.red;
-        lineRenderer.endColor = Color.red;
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
         lineRenderer.positionCount = mapMatrix.Cast<int>().Max();
-        lineRenderer.useWorldSpace = true;
-
-        // lineRenderer.material = GetComponent<Renderer>().material;
-        // lineRenderer.sortingLayerName = "Foreground";
-        // mis intentos de asignar un material y sorting layer xd
-
 
         while (drawing)
         {
@@ -40,7 +48,7 @@ public class DrawPredictiveLine : MonoBehaviour
                 {
                     if (mapMatrix[i, j] == counter)
                     {
-                        firstPoint = new Vector3(j * gridWidth / 7 + (float)tileWidth / 2f, i * gridHeight / 11 + (float)tileHeight / 2f, 0);
+                        firstPoint = new Vector3(j * (float)gridWidth / 11f - 5.5f, -i * (float)gridHeight / 7f + 3.5f, -0.5f);
                         foundNext = true;
                     }
                 }
