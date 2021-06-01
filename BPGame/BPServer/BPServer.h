@@ -4,13 +4,14 @@
 
 using json = nlohmann::json;
 
-class BPServer{
+class BPServer
+{
 private:
     int baseSocketNumber = 5000;
     int sockfd{}, newsockfd{};
-    char buffer[511]{};
+    char buffer[2048]{};
     void error(const char *msg);
-    void bindingProcess(int* sockfd, int* portno, struct sockaddr_in* serv_addr);
+    void bindingProcess(int *sockfd, int *portno, struct sockaddr_in *serv_addr);
     void serverSetup();
 
 public:
@@ -20,7 +21,5 @@ public:
     void sendBuffer(json jsonMsg);
     void endServer();
 };
-
-
 
 #endif //BPSERVER_BPSERVER_H
