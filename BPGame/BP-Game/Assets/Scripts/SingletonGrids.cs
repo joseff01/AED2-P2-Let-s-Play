@@ -30,8 +30,11 @@ public class SingletonGrids{
     public void asignZValues()
     {
         arrayZValue(globalFrogGrid,1);
-        Vector2[] canchas = { new Vector2(-5.5f, 0.5f), new Vector2(4.5f, 0.5f) };
-        arrayZValue(canchas, 2);
+        Vector2[] canchasIz = { new Vector2(-5.5f, 0.5f) };
+        Vector2[] canchasDer = { new Vector2(4.5f, 0.5f) };
+        if (SingletonInt.Instance.isPlayer) { arrayZValue(canchasIz, 2); }
+        else { arrayZValue(canchasDer, 2); }
+        
     }
     void arrayZValue(Vector2[] arrayV2, float value)
     {

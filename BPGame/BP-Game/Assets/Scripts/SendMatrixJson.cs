@@ -14,6 +14,7 @@ public class SendMatrixJson
         SingletonInt.Instance.client.SendMsg(msg);
         int[,] product = JsonConvert.DeserializeObject<int[,]>(SingletonInt.Instance.client.ReceiveMsg());
         DrawPredictiveLine.DrawLine(product);
+        Debug.Log("se envio json");
 
     }
 
