@@ -29,4 +29,8 @@ public class SingletonInt
     {
         left = value;
     }
+    public void setPlayer(bool value)
+    {
+        isPlayer = value;
+    }
 }

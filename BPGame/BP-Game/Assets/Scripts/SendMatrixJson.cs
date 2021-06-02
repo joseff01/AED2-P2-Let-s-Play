@@ -9,6 +9,7 @@ public class SendMatrixJson
 {
     public static void serializeMatrix(int[,] matrix)
     {
+
         if (SingletonInt.Instance.isPlayer) { SingletonInt.Instance.client.SendMsg("{ \"algorithm\" : 0}"); }
         else { SingletonInt.Instance.client.SendMsg("{ \"algorithm\" : 1}"); }
         

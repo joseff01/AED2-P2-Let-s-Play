@@ -27,16 +27,16 @@ public class SingletonGrids{
         globalFrogGrid = grid;
     }
 
-    public void asignZValues()
+    public void asignZValues(bool temp)
     {
-        arrayZValue(globalFrogGrid,1);
+        if(temp){ arrayZValue(globalFrogGrid, 1); }
         Vector2[] canchasIz = { new Vector2(-5.5f, 0.5f) };
         Vector2[] canchasDer = { new Vector2(4.5f, 0.5f) };
         if (SingletonInt.Instance.isPlayer) { arrayZValue(canchasDer, 2); }
         else { arrayZValue(canchasIz, 2); }
         
     }
-    void arrayZValue(Vector2[] arrayV2, float value)
+    public void arrayZValue(Vector2[] arrayV2, float value)
     {
         foreach (Vector2 element in arrayV2)
         {
@@ -66,6 +66,21 @@ public class SingletonGrids{
         }
         createMatrix();
     }
+    public void changePlayer() {
+        SingletonInt.Instance.isPlayer = !SingletonInt.Instance.isPlayer;
+
+        Vector3[] matrix = globalGrid;
+        Vector2[] arrayV2 = { new Vector2(4.5f, 0.5f), new Vector2(-5.5f, 0.5f) };
+        foreach (Vector2 element in arrayV2)
+        {
+            Vector3 position = Array.Find(globalGrid, gridPos => ((Vector2)gridPos).Equals(element));
+            int index = Array.IndexOf(globalGrid, position);
+            position.z = 0;
+            globalGrid[index] = position;
+        }
+        asignZValues(false);
+    }
+
     void createMatrix()
     {
         int[,] matrix = new int[11, 7];
@@ -78,7 +93,25 @@ public class SingletonGrids{
                 counter++;
             }
         }
+        PrintMatrix(matrix);
+        Debug.Log("sent");
         SendMatrixJson.serializeMatrix(matrix);
+    }
+    void PrintMatrix(int[,] matrix)
+    {
+        int rowLength = matrix.GetLength(0);
+        int colLength = matrix.GetLength(1);
+        string arrayString = "";
+        for (int j = 0; j < colLength; j++)
+        {
+            for (int i = 0; i < rowLength; i++)
+            {
+                arrayString += string.Format("{0} ", matrix[i, j]);
+            }
+            arrayString += System.Environment.NewLine + System.Environment.NewLine;
+        }
+
+        Debug.Log(arrayString);
     }
 
 }

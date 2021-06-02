@@ -70,8 +70,9 @@ public class BallClick : MonoBehaviour
         yield return new WaitForSeconds(1);
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
-        SingletonInt.Instance.isPlayer = !SingletonInt.Instance.isPlayer;
+        SingletonGrids.Instance.changePlayer();
         yield return new WaitForSeconds(1);
+
         SingletonGrids.Instance.ballPos(transform.position);
         
     }
@@ -81,6 +82,7 @@ public class BallClick : MonoBehaviour
         gameObject.transform.position = startingPos;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
+        SingletonGrids.Instance.changePlayer();
         SingletonGrids.Instance.ballPos(transform.position);
     }
     public void moveEnemyBall(int[,] mapMatrix) {

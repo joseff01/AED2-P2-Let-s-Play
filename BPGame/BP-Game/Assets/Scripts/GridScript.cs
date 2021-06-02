@@ -36,7 +36,7 @@ public class GridScript : MonoBehaviour
         Invoke("triggerZValues", 0.2f);
     }
     void triggerZValues() {
-        SingletonGrids.Instance.asignZValues();
+        SingletonGrids.Instance.asignZValues(true);
     }
 
 
