@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Obstacle
   - Ball
+  - pathLine
   layers:
   - Default
   - TransparentFX
