@@ -56,9 +56,10 @@ int main()
         { //A*
             bpServer.readBuffer();
             jsonMsg = bpServer.getBuffer();
-            List<List<int>> badList = jsonMsg["matrix"];
 
+            List<List<int>> badList = jsonMsg["matrix"];
             List<List<int>> list = bpServer.fixMatrix(badList);
+
             int matrix[7][11];
             for (unsigned i = 0; (i < 7); i++)
             {
@@ -88,7 +89,10 @@ int main()
         { //Backtracking
             bpServer.readBuffer();
             jsonMsg = bpServer.getBuffer();
-            List<List<int>> list = jsonMsg["matrix"];
+
+            List<List<int>> badList = jsonMsg["matrix"];
+            List<List<int>> list = bpServer.fixMatrix(badList);
+
             int matrix[7][11];
             for (unsigned i = 0; (i < 7); i++)
             {
