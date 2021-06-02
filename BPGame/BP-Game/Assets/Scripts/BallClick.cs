@@ -24,16 +24,22 @@ public class BallClick : MonoBehaviour
 
     private void OnMouseDown()              //Detecta Click del mouse    
     {
-        rb.isKinematic = true;                                                                      // Permite que la bola no se mueva
-        clicked = true;
-        line.setVIsible(true);
+        if (SingletonInt.Instance.isPlayer)
+        { 
+            rb.isKinematic = true;                                                                      // Permite que la bola no se mueva
+            clicked = true;
+            line.setVIsible(true);
+        }
     }
     private void OnMouseUp()               //Detecta release del mouse
     {
-        clicked = false;
-        indicator.SetActive(false);
-        line.setVIsible(false);
-        pushBall();
+        if (SingletonInt.Instance.isPlayer)
+        { 
+            clicked = false;
+            indicator.SetActive(false);
+            line.setVIsible(false);
+            pushBall();
+        }
     }
     private void Update()                  //Mueve el indicador a la posicion del mouse
     {
@@ -64,7 +70,10 @@ public class BallClick : MonoBehaviour
         yield return new WaitForSeconds(1);
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
+        SingletonInt.Instance.isPlayer = !SingletonInt.Instance.isPlayer;
+        yield return new WaitForSeconds(1);
         SingletonGrids.Instance.ballPos(transform.position);
+        
     }
 
     public void ResetPos()  // al colisionar con la cancha se resetea la posicion
@@ -73,6 +82,24 @@ public class BallClick : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
         SingletonGrids.Instance.ballPos(transform.position);
+    }
+    public void moveEnemyBall(int[,] mapMatrix) {
+        int counter = 0;
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 11; j++)
+            {
+                if (mapMatrix[i, j] == 1){
+                    Vector2 pos = SingletonGrids.Instance.globalGrid[counter];
+                    Vector2 ballPos = gameObject.transform.position;
+                    rb.AddRelativeForce(pos - ballPos, ForceMode2D.Impulse);
+                    break;
+                }
+                counter++;
+                
+            }
+        }
+       StartCoroutine(stopMotion());
     }
 
 }

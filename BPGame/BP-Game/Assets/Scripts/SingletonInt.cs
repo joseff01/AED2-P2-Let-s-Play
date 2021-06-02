@@ -6,7 +6,7 @@ public class SingletonInt
     public BPClient client;
     public int right = 0;
     public int left = 0;
-    public bool isPlayer = true;
+    public bool isPlayer = false;
 
     public static SingletonInt Instance
     {

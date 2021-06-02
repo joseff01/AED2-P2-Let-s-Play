@@ -5,7 +5,7 @@ using System.Linq;
 
 public class DrawPredictiveLine : MonoBehaviour
 {
-
+    private static BallClick bola  = null;
     private static LineRenderer lineRenderer = new GameObject("Line").AddComponent<LineRenderer>();
 
     public static void InstantiateLineRenderer()
@@ -13,8 +13,8 @@ public class DrawPredictiveLine : MonoBehaviour
         //For creating line renderer object
         lineRenderer.startColor = Color.red;
         lineRenderer.endColor = Color.red;
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
+        lineRenderer.startWidth = 0.05f;
+        lineRenderer.endWidth = 0.05f;
         lineRenderer.useWorldSpace = true;
 
         DontDestroyOnLoad(lineRenderer);
@@ -30,8 +30,6 @@ public class DrawPredictiveLine : MonoBehaviour
     {
         int gridWidth = 11;
         int gridHeight = 7;
-        int tileWidth = 1;
-        int tileHeight = 1;
 
         int counter = 1;
         bool drawing = true;
@@ -63,9 +61,14 @@ public class DrawPredictiveLine : MonoBehaviour
             else
             {
                 drawing = false;
-                return;
+                break;
             }
 
+        }
+        if (bola == null)
+            bola = GameObject.FindWithTag("Ball").GetComponent<BallClick>();
+        if (!SingletonInt.Instance.isPlayer) {
+            bola.moveEnemyBall(mapMatrix);
         }
     }
 }
