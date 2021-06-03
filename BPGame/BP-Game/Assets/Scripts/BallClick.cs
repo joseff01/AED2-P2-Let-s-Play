@@ -87,19 +87,36 @@ public class BallClick : MonoBehaviour
     }
     public void moveEnemyBall(int[,] mapMatrix) {
         int counter = 0;
+        bool thereIsTwo = false;
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 11; j++)
             {
-                if (mapMatrix[i, j] == 1){
+                if (mapMatrix[i, j] == 2 ){
                     Vector2 pos = SingletonGrids.Instance.globalGrid[counter];
                     Vector2 ballPos = gameObject.transform.position;
                     rb.AddRelativeForce(pos - ballPos, ForceMode2D.Impulse);
+                    thereIsTwo = true;
                     break;
                 }
                 counter++;
                 
             }
+            if (!thereIsTwo) {
+                for (int j = 0; j < 11; j++)
+                {
+                    if (mapMatrix[i, j] == 1)
+                    {
+                        Vector2 pos = SingletonGrids.Instance.globalGrid[counter];
+                        Vector2 ballPos = gameObject.transform.position;
+                        rb.AddRelativeForce(pos - ballPos, ForceMode2D.Impulse);
+                        break;
+                    }
+                    counter++;
+
+                }
+            }
+          
         }
        StartCoroutine(stopMotion());
     }
