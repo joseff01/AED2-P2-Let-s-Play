@@ -4,6 +4,21 @@
 #include "AStarAlgorithm.h"
 #include "../../LinkedList/List.h"
 
+bool checkForThree(int matrix[MAPROWS][MAPCOLUMNS])
+{
+    for (int i = 0; (i < 7); i++)
+    {
+        for (int j = 0; (j < 11); j++)
+        {
+            if (matrix[i][j] == 3)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 int main()
 {
     /*   std::cout << "Indexed:\n";
@@ -68,8 +83,23 @@ int main()
                     matrix[i][j] = list[i][j];
                 }
             }
-            AStarAlgorithm aStarAlgorithm = AStarAlgorithm();
-            int **resultMatrix = aStarAlgorithm.findPath(matrix);
+            int **resultMatrix;
+            if (checkForThree)
+            {
+                AStarAlgorithm aStarAlgorithm = AStarAlgorithm();
+                resultMatrix = aStarAlgorithm.findPath(matrix);
+            }
+            else
+            {
+                for (unsigned i = 0; (i < 7); i++)
+                {
+                    for (unsigned j = 0; (j < 11); j++)
+                    {
+                        resultMatrix[i][j] = 0;
+                    }
+                }
+            }
+
             List<List<int>> resultList;
             for (unsigned i = 0; (i < 7); i++)
             {
@@ -101,8 +131,22 @@ int main()
                     matrix[i][j] = list[i][j];
                 }
             }
-            BacktrackingAlgorithm backtrackingAlgorithm = BacktrackingAlgorithm();
-            int **resultMatrix = backtrackingAlgorithm.findPath(matrix);
+            int **resultMatrix;
+            if (checkForThree(matrix))
+            {
+                BacktrackingAlgorithm backtrackingAlgorithm = BacktrackingAlgorithm();
+                resultMatrix = backtrackingAlgorithm.findPath(matrix);
+            }
+            else
+            {
+                for (unsigned i = 0; (i < 7); i++)
+                {
+                    for (unsigned j = 0; (j < 11); j++)
+                    {
+                        resultMatrix[i][j] = 0;
+                    }
+                }
+            }
             List<List<int>> resultList;
             for (unsigned i = 0; (i < 7); i++)
             {

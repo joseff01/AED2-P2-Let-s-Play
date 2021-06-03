@@ -13,19 +13,19 @@ public class BallClick : MonoBehaviour
 
     public GameObject indicator;
     private bool clicked = false;
-    
+
 
     private void Start()                     //Obtiene el Rigid Body
     {
         rb = GetComponent<Rigidbody2D>();
         startingPos = gameObject.transform.position;
-        Invoke("ResetPos", 0.5f); 
+        Invoke("ResetPos", 0.5f);
     }
 
     private void OnMouseDown()              //Detecta Click del mouse    
     {
         if (SingletonInt.Instance.isPlayer)
-        { 
+        {
             rb.isKinematic = true;                                                                      // Permite que la bola no se mueva
             clicked = true;
             line.setVIsible(true);
@@ -34,7 +34,7 @@ public class BallClick : MonoBehaviour
     private void OnMouseUp()               //Detecta release del mouse
     {
         if (SingletonInt.Instance.isPlayer)
-        { 
+        {
             clicked = false;
             indicator.SetActive(false);
             line.setVIsible(false);
@@ -55,15 +55,15 @@ public class BallClick : MonoBehaviour
     private void pushBall()
     {
         rb.isKinematic = false;                                                                    //Permite que la bola se muevaa
-        
+
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 ballPos = gameObject.transform.position;
-        
 
-        rb.AddRelativeForce(mousePos-ballPos, ForceMode2D.Impulse);
+
+        rb.AddRelativeForce(mousePos - ballPos, ForceMode2D.Impulse);
 
         StartCoroutine(stopMotion());                       //Para el movimiento de la bola
-}
+    }
 
     IEnumerator stopMotion()                //Para y hace una llamada al servidor
     {
@@ -74,7 +74,7 @@ public class BallClick : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         SingletonGrids.Instance.ballPos(transform.position);
-        
+
     }
 
     public void ResetPos()  // al colisionar con la cancha se resetea la posicion
@@ -82,27 +82,35 @@ public class BallClick : MonoBehaviour
         gameObject.transform.position = startingPos;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
-        SingletonGrids.Instance.changePlayer();
-        SingletonGrids.Instance.ballPos(transform.position);
+        if (!SingletonInt.Instance.isPlayer)
+        {
+            SingletonGrids.Instance.changePlayer();
+            SingletonGrids.Instance.ballPos(transform.position);
+        }
+        // SingletonGrids.Instance.changePlayer();
+        // SingletonGrids.Instance.ballPos(transform.position);
     }
-    public void moveEnemyBall(int[,] mapMatrix) {
+
+    public void moveEnemyBall(int[,] mapMatrix)
+    {
         int counter = 0;
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 11; j++)
             {
-                if (mapMatrix[i, j] == 2 ){
+                if (mapMatrix[i, j] == 2)
+                {
                     Vector2 pos = SingletonGrids.Instance.globalGrid[counter];
                     Vector2 ballPos = gameObject.transform.position;
                     rb.AddRelativeForce(pos - ballPos, ForceMode2D.Impulse);
                     break;
                 }
                 counter++;
-                
+
             }
-          
+
         }
-       StartCoroutine(stopMotion());
+        StartCoroutine(stopMotion());
     }
 
 }
