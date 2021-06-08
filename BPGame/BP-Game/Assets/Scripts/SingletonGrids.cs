@@ -32,8 +32,17 @@ public class SingletonGrids{
         if(temp){ arrayZValue(globalFrogGrid, 1); }
         Vector2[] canchasIz = { new Vector2(-5.5f, 0.5f) };
         Vector2[] canchasDer = { new Vector2(4.5f, 0.5f) };
-        if (SingletonInt.Instance.isPlayer) { arrayZValue(canchasDer, 2); }
-        else { arrayZValue(canchasIz, 2); }
+        if (!SingletonInt.Instance.isMultiPlayer)
+        {
+            if (SingletonInt.Instance.isPlayer) { arrayZValue(canchasDer, 2); }
+            else { arrayZValue(canchasIz, 2); }
+        }
+        else
+        {
+            if (SingletonInt.Instance.isPlayerMult) { arrayZValue(canchasDer, 2); }
+            else { arrayZValue(canchasIz, 2); }
+        }
+            
         
     }
     public void arrayZValue(Vector2[] arrayV2, float value)
@@ -67,7 +76,8 @@ public class SingletonGrids{
         createMatrix();
     }
     public void changePlayer() {
-        SingletonInt.Instance.isPlayer = !SingletonInt.Instance.isPlayer;
+        if (!SingletonInt.Instance.isMultiPlayer) { SingletonInt.Instance.isPlayer = !SingletonInt.Instance.isPlayer; }
+        else { SingletonInt.Instance.isPlayerMult = !SingletonInt.Instance.isPlayerMult; SingletonInt.Instance.isPlayer = true; }
 
         Vector3[] matrix = globalGrid;
         Vector2[] arrayV2 = { new Vector2(4.5f, 0.5f), new Vector2(-5.5f, 0.5f) };
