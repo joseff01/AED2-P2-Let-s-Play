@@ -19,11 +19,6 @@ public class DrawPredictiveLine : MonoBehaviour
 
         DontDestroyOnLoad(lineRenderer);
 
-        Debug.Log("lineRenderer instantiated!!");
-
-        // lineRenderer.material = GetComponent<Renderer>().material;
-        // lineRenderer.sortingLayerName = "Foreground";
-        // mis intentos de asignar un material y sorting layer xd
     }
 
     public static void DrawLine(int[,] mapMatrix)

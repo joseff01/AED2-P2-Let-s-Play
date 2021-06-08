@@ -8,7 +8,6 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         DrawPredictiveLine.InstantiateLineRenderer();
-        Debug.Log(SingletonInt.Instance.isMultiPlayer);
         SingletonInt.Instance.client.StartClient();
         SceneManager.LoadScene(1);
     }

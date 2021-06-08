@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * @brief BallClick clase que detecta el click de la bola y realiza el movimiento del objeto
+ * */
 public class BallClick : MonoBehaviour
 {
     [SerializeField] private Transform[] points;
@@ -107,7 +110,7 @@ public class BallClick : MonoBehaviour
         }
     }
 
-    public void moveEnemyBall(int[,] mapMatrix)
+    public void moveEnemyBall(int[,] mapMatrix) //crea el movimiento del enemigo
     {
         int counter = 0;
         for (int i = 0; i < 7; i++)
@@ -126,7 +129,7 @@ public class BallClick : MonoBehaviour
             }
 
         }
-        StartCoroutine(stopMotion());
+        StartCoroutine(callStop());
     }
 
 }

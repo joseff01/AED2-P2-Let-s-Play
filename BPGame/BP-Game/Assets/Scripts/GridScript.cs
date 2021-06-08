@@ -29,7 +29,6 @@ public class GridScript : MonoBehaviour
 
                 grid[counter] = new Vector3(i, j,0);
                 counter++;
-                
             }
         }
        SingletonGrids.Instance.setGlobalGrid(grid);

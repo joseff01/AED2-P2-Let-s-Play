@@ -6,7 +6,11 @@ using Newtonsoft.Json.Linq;
 
 public class SendMatrixJson
 
-{
+{   /**
+    *
+    * @brief  serializeMatrix recive matriz y la envia al servidor
+    * @param matrix recive la matriz que se va a enviar
+    * */
     public static void serializeMatrix(int[,] matrix)
     {
         
@@ -16,14 +20,13 @@ public class SendMatrixJson
         string json = JsonConvert.SerializeObject(matrix, Formatting.Indented);
         
         string msg = "{ \"matrix\" :" + json + "}";
-        SingletonInt.Instance.client.SendMsg(msg);
-        Debug.Log("se envió json");
-        var jObj = JObject.Parse(SingletonInt.Instance.client.ReceiveMsg());
+        SingletonInt.Instance.client.SendMsg(msg);  // Se envio Json
+      
+        var jObj = JObject.Parse(SingletonInt.Instance.client.ReceiveMsg()); //Se recivio respuesta 
         int[,] product = jObj["matrix"].ToObject<int[,]>();
-        Debug.Log("Se recibió respuesta");
-        Debug.Log(product);
-        
+
         DrawPredictiveLine.DrawLine(product);
+        
         
 
     }

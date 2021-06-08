@@ -263,6 +263,7 @@ MonoBehaviour:
   line: {fileID: 1832110286}
   ball: {fileID: 273955316}
   indicator: {fileID: 1035865808}
+  reset: 0
 --- !u!1 &304012912
 GameObject:
   m_ObjectHideFlags: 0

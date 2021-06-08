@@ -104,8 +104,7 @@ public class SingletonGrids{
             }
         }
         matrix = checkMatrix(matrix);
-        Debug.Log("sent");
-        SendMatrixJson.serializeMatrix(matrix);
+        SendMatrixJson.serializeMatrix(matrix);// se envia el mensaje para ser serializado
     }
 
     int[,] checkMatrix(int[,] matrix)
