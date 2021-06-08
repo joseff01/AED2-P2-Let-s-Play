@@ -82,8 +82,7 @@ public class BallClick : MonoBehaviour
         gameObject.transform.position = startingPos;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
-        SingletonGrids.Instance.changePlayer();
-        SingletonGrids.Instance.ballPos(transform.position);
+        StartCoroutine(stopMotion());
     }
     public void moveEnemyBall(int[,] mapMatrix) {
         int counter = 0;

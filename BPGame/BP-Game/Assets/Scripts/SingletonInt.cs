@@ -7,6 +7,8 @@ public class SingletonInt
     public int right = 0;
     public int left = 0;
     public bool isPlayer = false;
+    public bool isPlayerMult = false;
+    public bool isMultiPlayer = false;
 
     public static SingletonInt Instance
     {
