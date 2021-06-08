@@ -2,13 +2,14 @@ using UnityEngine;
 public class SingletonInt
 {
     private static SingletonInt instance;
-    public int value;
+    public int value = 2;
+    public int goalValue = 5;
     public BPClient client;
     public int right = 0;
     public int left = 0;
     public bool isPlayer = false;
     public bool isPlayerMult = false;
-    public bool isMultiPlayer = true;
+    public bool isMultiPlayer = false;
 
     public static SingletonInt Instance
     {

@@ -13,8 +13,8 @@ public class Collision : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         i++;
-        if (i == 5 && isRight) {  YouWon.gameObject.SetActive(true); }
-        else if(i == 5) { YouWon.SetText("YOU LOST");  YouWon.gameObject.SetActive(true); }
+        if (i == SingletonInt.Instance.goalValue && isRight) {  YouWon.gameObject.SetActive(true); }
+        else if(i == SingletonInt.Instance.goalValue) { YouWon.SetText("YOU LOST");  YouWon.gameObject.SetActive(true); }
 
         if (isRight)
         {
