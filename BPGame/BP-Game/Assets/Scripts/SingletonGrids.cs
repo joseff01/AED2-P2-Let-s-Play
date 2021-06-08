@@ -103,26 +103,34 @@ public class SingletonGrids{
                 counter++;
             }
         }
-        PrintMatrix(matrix);
+        matrix = checkMatrix(matrix);
         Debug.Log("sent");
         SendMatrixJson.serializeMatrix(matrix);
     }
-    void PrintMatrix(int[,] matrix)
+
+    int[,] checkMatrix(int[,] matrix)
     {
+        bool thereIsThree = false;
         int rowLength = matrix.GetLength(0);
         int colLength = matrix.GetLength(1);
         string arrayString = "";
+
         for (int j = 0; j < colLength; j++)
         {
             for (int i = 0; i < rowLength; i++)
             {
+                if (matrix[i, j] == 3) { thereIsThree = true; }
                 arrayString += string.Format("{0} ", matrix[i, j]);
             }
             arrayString += System.Environment.NewLine + System.Environment.NewLine;
         }
 
+        if (!thereIsThree) { matrix[5, 3] = 3;}
         Debug.Log(arrayString);
-    }
+        return matrix;
 
+
+
+    }
 }
         

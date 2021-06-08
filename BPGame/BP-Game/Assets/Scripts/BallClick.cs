@@ -14,6 +14,9 @@ public class BallClick : MonoBehaviour
     public GameObject indicator;
     private bool clicked = false;
 
+    public bool reset = false;
+    bool first = true;
+
 
     private void Start()                     //Obtiene el Rigid Body
     {
@@ -38,6 +41,7 @@ public class BallClick : MonoBehaviour
             clicked = false;
             indicator.SetActive(false);
             line.setVIsible(false);
+
             pushBall();
         }
     }
@@ -62,18 +66,31 @@ public class BallClick : MonoBehaviour
 
         rb.AddRelativeForce(mousePos - ballPos, ForceMode2D.Impulse);
 
-        StartCoroutine(stopMotion());                       //Para el movimiento de la bola
+        StartCoroutine(callStop());
+    }
+
+    IEnumerator callStop()
+    {
+        yield return new WaitForSeconds(1);
+        if (reset)
+        {
+            reset = false;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = 0;
+        }
+        else
+            StartCoroutine(stopMotion());  //Para el movimiento de la bola 
     }
 
     IEnumerator stopMotion()                //Para y hace una llamada al servidor
     {
-        yield return new WaitForSeconds(1);
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
         SingletonGrids.Instance.changePlayer();
-        yield return new WaitForSeconds(1);
 
+        yield return new WaitForSeconds(0.2f);
         SingletonGrids.Instance.ballPos(transform.position);
+        
 
     }
 
@@ -82,7 +99,12 @@ public class BallClick : MonoBehaviour
         gameObject.transform.position = startingPos;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
+        reset = true;
         StartCoroutine(stopMotion());
+        if (first)
+        { reset = false;
+            first = false;
+        }
     }
 
     public void moveEnemyBall(int[,] mapMatrix)
